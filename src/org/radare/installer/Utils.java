@@ -123,9 +123,10 @@ public class Utils {
 		String arch = "arm";
 		String cpuabi = Build.CPU_ABI;
 
-		if (cpuabi.matches(".*mips.*")) arch="mips";
-		if (cpuabi.matches(".*x86.*")) arch="x86";
-		if (cpuabi.matches(".*arm64.*")) arch="aarch64";
+		if (cpuabi.matches(".*mips64.*")) arch="mips64";
+		else if (cpuabi.matches(".*mips.*")) arch="mips";
+		else if (cpuabi.matches(".*x86.*")) arch="x86";
+		else if (cpuabi.matches(".*arm64.*")) arch="aarch64";
 		else if (cpuabi.matches(".*arm.*")) arch="arm";
 		return arch;
 	}
