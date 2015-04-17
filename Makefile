@@ -27,7 +27,7 @@ uninstall:
 
 
 install: uninstall build
-	$(ADB) install bin/radare2\ installer-${BUILD}.apk
+	$(ADB) install bin/radare2-installer-${BUILD}.apk
 	$(ADB) shell 'LD_LIBRARY_PATH=/system/lib am start -n org.radare.installer/.LaunchActivity'
 
 test:
@@ -35,9 +35,9 @@ test:
 	#$(ADB) shell "su -c 'LD_LIBRARY_PATH=/system/lib pm uninstall jackpal.androidterm'"
 	rm -rf bin gen
 	ant ${BUILD} install
-	$(ADB) shell rm /sdcard/radare2\ installer-${BUILD}.apk
-	$(ADB) push bin/radare2\ installer-${BUILD}.apk /sdcard/
-	$(ADB) shell "su -c 'LD_LIBRARY_PATH=/system/lib pm install /sdcard/radare2\ installer-${BUILD}.apk'"
+	$(ADB) shell rm /sdcard/radare2-installer-${BUILD}.apk
+	$(ADB) push bin/radare2-installer-${BUILD}.apk /sdcard/
+	$(ADB) shell "su -c 'LD_LIBRARY_PATH=/system/lib pm install /sdcard/radare2-installer-${BUILD}.apk'"
 	$(ADB) shell 'LD_LIBRARY_PATH=/system/lib am start -n org.radare.installer/.LaunchActivity'
 	
 

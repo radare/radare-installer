@@ -16,6 +16,12 @@
             android:entryValues="@array/updateIntervalValues"
             android:dependency="perform_updates"
         />    
+        <EditTextPreference
+            android:key="http_url"
+            android:summary="The place to check for updates"
+            android:title="URL for updates"
+            android:defaultValue="http://radare.org/get/pkg/android"
+        />
     </PreferenceCategory>
     <PreferenceCategory android:title="Storage Settings" android:key="second_category">
         <CheckBoxPreference
@@ -31,6 +37,12 @@
             android:summary="To connect from your desktop via wifi/cable"
             android:title="Public HTTP server"
             android:defaultValue="false"
+        />
+        <EditTextPreference
+            android:key="http_port"
+            android:summary="Which TCP port should r2 webserver listen at?"
+            android:title="HTTP port"
+            android:defaultValue="9090"
         />
     </PreferenceCategory>
 </PreferenceScreen>

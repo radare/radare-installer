@@ -18,7 +18,7 @@
 	android:largeScreens="true"
 	android:anyDensity="true" />
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".LaunchActivity" android:label="Radare2 Android">
+        <activity android:name=".LaunchActivity" android:label="radare2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

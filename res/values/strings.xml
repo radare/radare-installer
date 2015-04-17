@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Radare2 Android</string>
+    <string name="app_name">radare2 for Android</string>
     <string name="service_name">radare2 update-check service</string>
 </resources>

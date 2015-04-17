@@ -84,7 +84,9 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="OPEN"
-		android:textColor="#ff000000"
+		android:background="@android:drawable/btn_default"
+		android:textAppearance="?android:attr/textAppearanceSmallInverse"
+		android:textColor="@android:color/primary_text_light"
 		/>
 
 	</LinearLayout>

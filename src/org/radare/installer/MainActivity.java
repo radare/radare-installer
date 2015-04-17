@@ -1,6 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
+    2015 Sergi Alvarez <pancake@nopcode.org>
 */
 package org.radare.installer;
 
@@ -42,6 +43,8 @@ public class MainActivity extends Activity {
 	
 	private Context context;
 	private Utils mUtils;
+	/* TODO: use https, verify, signify */
+	private String http_url_default = "http://radare.org/get/pkg/android/";
 
 	/** Called when the activity is first created. */
 	@Override
@@ -73,6 +76,7 @@ public class MainActivity extends Activity {
 		output ("Welcome to radare2 installer!\nMake your selections on the checkbox above and click the INSTALL button to begin.\nYou can access more settings by pressing the menu button.\n\n");
 
 		if (mUtils.isInternetAvailable()) {
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			Thread thread = new Thread(new Runnable() {
 				public void run() {
 					String version = mUtils.GetPref("version");
@@ -81,7 +85,8 @@ public class MainActivity extends Activity {
 					if (!version.equals("unknown") && !ETag.equals("unknown") && RootTools.exists("/data/data/org.radare.installer/radare2/bin/radare2")) {
 						output ("radare2 " + version + " is installed.\n");
 						String arch = mUtils.GetArch();
-						String url = "http://radare.org/get/pkg/android/" + arch + "/" + version;
+						String http_url = prefs.getString ("http_url", http_url_default);
+						String url = http_url + "/" + arch + "/" + version;
 						boolean update = mUtils.UpdateCheck(url);
 						if (update) {
 							output ("New radare2 " + version + " version available!\nClick INSTALL to update now.\n");
@@ -164,9 +169,11 @@ public class MainActivity extends Activity {
 					}
 
 					// store installed version in preferences
-					mUtils.StorePref("version",hg);
+					mUtils.StorePref("version", hg);
 
-					url = "http://radare.org/get/pkg/android/" + arch + "/" + hg;
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+					String http_url = prefs.getString ("http_url", http_url_default);
+					url = http_url + "/" + arch + "/" + hg;
 
 					/* fix broken stable URL in radare2 0.9 */
 					/*
@@ -185,7 +192,6 @@ public class MainActivity extends Activity {
 					mUtils.exec("rm /data/data/org.radare.installer/radare2-android.tar");
 					mUtils.exec("rm /data/data/org.radare.installer/radare2-android.tar.gz");
 
-					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 					boolean use_sdcard = prefs.getBoolean("use_sdcard", false);
 
 					String storagePath = mUtils.GetStoragePath();
@@ -194,7 +200,7 @@ public class MainActivity extends Activity {
 					long minSpace = 15;
 
 					space = (mUtils.getFreeSpace("/data") / (1024*1024));
-					output("Free space on data partition: " + space + "Mb\n");
+					output("Free space on data partition: " + space + "MB\n");
 
 					if (space <= 0) {
 						output("Warning: could not check space in data partition\n");
@@ -207,7 +213,7 @@ public class MainActivity extends Activity {
 						mUtils.exec("rm -rf " + storagePath);
 						//output("StoragePath = " + storagePath + "\n");
 						space = (mUtils.getFreeSpace(storagePath.replace("/org.radare.installer/","")) / (1024*1024));
-						output("Free space on external storage: " + space + "Mb\n");
+						output("Free space on external storage: " + space + "MB\n");
 						if (space < minSpace) {	
 							output("Warning: low space on external storage\n");
 						}

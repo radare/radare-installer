@@ -64,13 +64,16 @@ public class WebActivity extends Activity {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		boolean http_public = prefs.getBoolean("http_public", false);
+		String http_port = prefs.getString("http_port", "9090");
 
 		String http_eval = "";
 		if (http_public) {
-			http_eval = "-c 'e http.public=1'";
+			//http_eval = "-e http.public=1";
+			// after 0.9.8
+			http_eval = "-e http.bind=public";
 			String localip = getLocalIpAddress();
 			if (localip != null) {
-				mUtils.myToast("r2 http server\n" + localip + ":9090", Toast.LENGTH_LONG);
+				mUtils.myToast("r2 http server\n" + localip + ":" + http_port, Toast.LENGTH_LONG);
 				Log.v(TAG, "ip address: " + localip);
 			}
 		}
@@ -92,7 +95,7 @@ public class WebActivity extends Activity {
 		if (RootTools.isProcessRunning("radare2")) {
 			String open_mode = mUtils.GetPref("open_mode");
 			if (open_mode.equals("browser")) {
-				String url = "http://localhost:9090";
+				String url = "http://localhost:"+http_port;
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(url));
 				startActivity(i);
