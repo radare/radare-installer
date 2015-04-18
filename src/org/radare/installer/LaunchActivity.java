@@ -32,6 +32,7 @@ public class LaunchActivity extends Activity {
 
 	private RadioGroup radiogroup;
 	private Button btnDisplay;
+	private Button btnDebug;
 	private EditText file_to_open;
 
 	@Override
@@ -98,43 +99,53 @@ public class LaunchActivity extends Activity {
 		super.onDestroy();
 	}
 
+	public void startStuff(String arg) {
+		int selectedId = radiogroup.getCheckedRadioButtonId();
+
+		file_to_open = (EditText) findViewById(R.id.file_to_open);
+		Bundle b = new Bundle();
+		b.putString("filename", arg+"\"" + file_to_open.getText().toString() + '"');
+		mUtils.StorePref("last_opened",file_to_open.getText().toString());
+
+		switch (selectedId) {
+		case R.id.radiobutton_web :
+			mUtils.StorePref("open_mode","web");
+			Intent intent1 = new Intent(LaunchActivity.this, WebActivity.class);
+			intent1.putExtras(b);
+			startActivity(intent1);
+			break;
+		case R.id.radiobutton_browser :
+			mUtils.StorePref("open_mode","browser");
+			Intent intent3 = new Intent(LaunchActivity.this, WebActivity.class);
+			intent3.putExtras(b);
+			startActivity(intent3);
+			break;
+		case R.id.radiobutton_console :
+			mUtils.StorePref("open_mode","console");
+			Intent intent2 = new Intent(LaunchActivity.this, LauncherActivity.class);
+			intent2.putExtras(b);
+			startActivity(intent2);
+			break;
+		}
+	}
+
 	public void addListenerOnButton() {
 
 		radiogroup = (RadioGroup) findViewById(R.id.radiogroup1);
-		btnDisplay = (Button) findViewById(R.id.button_open);
+		btnDebug = (Button) findViewById(R.id.button_debug);
+		btnDebug.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startStuff ("-d ");
+			}
+		});
 
+		btnDisplay = (Button) findViewById(R.id.button_open);
 		btnDisplay.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
-				int selectedId = radiogroup.getCheckedRadioButtonId();
-
-				file_to_open = (EditText) findViewById(R.id.file_to_open);
-				Bundle b = new Bundle();
-				b.putString("filename", '"' + file_to_open.getText().toString() + '"');
-				mUtils.StorePref("last_opened",file_to_open.getText().toString());
-
-				switch (selectedId) {
-					case R.id.radiobutton_web :
-						mUtils.StorePref("open_mode","web");
-						Intent intent1 = new Intent(LaunchActivity.this, WebActivity.class);
-						intent1.putExtras(b);
-						startActivity(intent1);
-					break;
-					case R.id.radiobutton_browser :
-						mUtils.StorePref("open_mode","browser");
-						Intent intent3 = new Intent(LaunchActivity.this, WebActivity.class);
-						intent3.putExtras(b);
-						startActivity(intent3);
-					break;
-					case R.id.radiobutton_console :
-						mUtils.StorePref("open_mode","console");
-						Intent intent2 = new Intent(LaunchActivity.this, LauncherActivity.class);
-						intent2.putExtras(b);
-						startActivity(intent2);
-					break;
-				}
+				startStuff ("");
 			}
 		});
 	}
