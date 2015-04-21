@@ -1,10 +1,11 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
+(c) 2015 pancake <pancake[at]nopcode[dot]org>
 */
-package org.radare.installer;
+package org.radare2.installer;
 
-import org.radare.installer.Utils;
+import org.radare2.installer.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class LaunchActivity extends Activity {
 
 		mUtils = new Utils(getApplicationContext());
 
-		File radarebin = new File("/data/data/org.radare.installer/radare2/bin/radare2");
+		File radarebin = new File("/data/data/org.radare2.installer/radare2/bin/radare2");
 		if (radarebin.exists()) {
 
 			// Get intent, action and extras

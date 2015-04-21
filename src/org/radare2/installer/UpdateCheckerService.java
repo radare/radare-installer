@@ -1,13 +1,14 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
+    2015 pancake <pancake[at]nopcode[dot]org>
 
-service skeleton from: http://it-ride.blogspot.com.es/2010/10/android-implementing-notification.html
-
+service skeleton from:
+  http://it-ride.blogspot.com.es/2010/10/android-implementing-notification.html
 */
-package org.radare.installer;
-import org.radare.installer.Utils;
+package org.radare2.installer;
 
+import org.radare2.installer.Utils;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -17,8 +18,7 @@ import android.os.AsyncTask;
 import android.net.ConnectivityManager;
 
 public class UpdateCheckerService extends Service {
-
-	private boolean update=false;
+	private boolean update = false;
 	private Utils mUtils;
 	
 	private WakeLock mWakeLock;

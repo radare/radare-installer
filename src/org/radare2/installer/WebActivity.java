@@ -1,10 +1,11 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
+    2015 pancake <pancake[at]nopcode[dot]org>
 */
-package org.radare.installer;
+package org.radare2.installer;
 
-import org.radare.installer.Utils;
+import org.radare2.installer.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -79,9 +80,7 @@ public class WebActivity extends Activity {
 		}
 		Log.v(TAG, "http_eval: " + http_eval);
 
-		//mUtils.exec("/data/data/org.radare.installer/radare2/bin/radare2 -c=h " + http_eval + " " + file_to_open );
-
-		String output = mUtils.exec("/data/data/org.radare.installer/radare2/bin/radare2 " + http_eval + " -c=h " + file_to_open + " &");
+		String output = mUtils.exec("/data/data/org.radare2.installer/radare2/bin/radare2 " + http_eval + " -c=h " + file_to_open + " &");
 		Log.v(TAG, "radare2 started");
 
 		// if radare2 is launched in background we need to wait

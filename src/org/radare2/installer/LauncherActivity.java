@@ -1,10 +1,11 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
+(c) 2015 pancake <pancake[at]nopcode[dot]org>
 */
-package org.radare.installer;
+package org.radare2.installer;
 
-import org.radare.installer.Utils;
+import org.radare2.installer.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class LauncherActivity extends Activity {
 			try {
 				Intent i = new Intent("jackpal.androidterm.RUN_SCRIPT");
 				i.addCategory(Intent.CATEGORY_DEFAULT);
-				i.putExtra("jackpal.androidterm.iInitialCommand", "export PATH=$PATH:/data/data/org.radare.installer/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
+				i.putExtra("jackpal.androidterm.iInitialCommand", "export PATH=$PATH:/data/data/org.radare2.installer/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
 				startActivity(i);
 			} catch (Exception e) {
 				mUtils.myToast("ERROR: Not enough permissions.\nPlease reinstall this application and try again.", Toast.LENGTH_LONG);

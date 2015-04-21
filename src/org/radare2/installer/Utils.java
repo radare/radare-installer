@@ -1,8 +1,9 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
+    2015 pancake <pancake[at]nopcode[dot]org>
 */
-package org.radare.installer;
+package org.radare2.installer;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -98,9 +99,9 @@ public class Utils {
 		boolean use_sdcard = settings.getBoolean("use_sdcard", false);
 		if (use_sdcard) {
 			File sdCard = Environment.getExternalStorageDirectory();
-			storagePath = sdCard.getAbsolutePath() + "/org.radare.installer/";
+			storagePath = sdCard.getAbsolutePath() + "/org.radare2.installer/";
 		} else {
-			//storagePath = "/data/data/org.radare.installer/";
+			//storagePath = "/data/data/org.radare2.installer/";
 			storagePath = mContext.getApplicationInfo().dataDir;
 		}
 		return storagePath;
