@@ -29,12 +29,14 @@ public class LauncherActivity extends Activity {
 		Bundle b = getIntent().getExtras();
 		String file_to_open = b.getString("filename");
 
-
 		if (mUtils.isAppInstalled("jackpal.androidterm")) {
 			try {
 				Intent i = new Intent("jackpal.androidterm.RUN_SCRIPT");
 				i.addCategory(Intent.CATEGORY_DEFAULT);
-				i.putExtra("jackpal.androidterm.iInitialCommand", "export PATH=$PATH:/data/data/org.radare2.installer/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
+				i.putExtra("jackpal.androidterm.iInitialCommand",
+					"export PATH=$PATH:/data/data/org.radare2.installer/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(i);
 			} catch (Exception e) {
 				mUtils.myToast("ERROR: Not enough permissions.\nPlease reinstall this application and try again.", Toast.LENGTH_LONG);
@@ -45,13 +47,17 @@ public class LauncherActivity extends Activity {
 			try {
 				Intent i = new Intent(Intent.ACTION_VIEW); 
 				i.setData(Uri.parse("market://details?id=jackpal.androidterm")); 
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(i);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-
-		finish();
 	}
-
+	@Override
+	protected void onPause(){
+		finish();
+		super.onPause();
+	}
 }

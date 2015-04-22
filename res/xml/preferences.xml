@@ -22,6 +22,12 @@
             android:title="URL for updates"
             android:defaultValue="http://radare.org/get/pkg/android"
         />
+        <EditTextPreference
+            android:key="local_url"
+            android:summary="Install from sdcard"
+            android:title="Local tarball path"
+            android:defaultValue="/sdcard/radare2-android.tar.gz"
+        />
     </PreferenceCategory>
     <PreferenceCategory android:title="Storage Settings" android:key="second_category">
         <CheckBoxPreference

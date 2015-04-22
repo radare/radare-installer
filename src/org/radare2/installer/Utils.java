@@ -51,10 +51,10 @@ public class Utils {
 	}
 
 	public boolean isAppInstalled(String namespace) {
-		try{
+		try {
 			ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(namespace, 0 );
 			return true;
-		} catch( PackageManager.NameNotFoundException e ){
+		} catch (PackageManager.NameNotFoundException e) {
 			return false;
 		}
 	}
@@ -136,7 +136,7 @@ public class Utils {
 	// check if we are connected to the internet
 		ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(mContext.CONNECTIVITY_SERVICE);
 		NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-		if(info == null)
+		if (info == null)
 			return false;
 
 		return connectivityManager.getActiveNetworkInfo().isConnected();
@@ -211,7 +211,4 @@ public class Utils {
 			RootTools.killProcess("radare2");
 		}
 	}
-
-
-
 }

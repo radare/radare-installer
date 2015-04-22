@@ -21,7 +21,19 @@ android:padding="15dp"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content" 
 	android:orientation="horizontal">
+		<CheckBox
+		android:id="@+id/checklocal"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="install from local archive (see settings)"
+		android:textColor="#ff000000"
+		/>
+	</LinearLayout>
 
+	<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content" 
+	android:orientation="horizontal">
 		<CheckBox
 		android:id="@+id/checkbox"
 		android:layout_width="wrap_content"
@@ -29,7 +41,6 @@ android:padding="15dp"
 		android:text="symlink binaries to xbin (needs root)"
 		android:textColor="#ff000000"
 		/>
-
 	</LinearLayout>
 
 	<LinearLayout
