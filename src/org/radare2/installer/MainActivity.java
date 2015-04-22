@@ -266,7 +266,7 @@ public class MainActivity extends Activity {
 						output("ERROR: could not write to storage!\n");
 					} else {
 						if (checkLocal.isChecked()) {
-							output("Unpacking local tarball... \n");
+							output("Unpacking local tarball... ");
 						} else {
 							output("Downloading radare-android... please wait\n");
 						}

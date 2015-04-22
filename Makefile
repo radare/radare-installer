@@ -59,7 +59,7 @@ key.store:
 		-keyalg RSA -keysize 4096 -validity 100000
 
 sign:
-	cp bin/radare2-installer-release-unsigned.apk bin/radare2-installer-release.apk
+	sh apk-clean.sh bin/radare2-installer-release-unsigned.apk bin/radare2-installer-release.apk
 	jarsigner -verbose -keystore key.store \
 		-digestalg SHA1 -sigalg MD5withRSA \
 		bin/radare2-installer-release.apk Radare2
