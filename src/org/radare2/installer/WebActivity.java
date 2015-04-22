@@ -56,7 +56,6 @@ public class WebActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		// make sure we don't start a second instance of radare webserver
 		mUtils.killradare();
 
@@ -105,7 +104,7 @@ public class WebActivity extends Activity {
 			if (open_mode.equals("browser")) {
 				String url = "http://localhost:"+port;
 				Intent i = new Intent(Intent.ACTION_VIEW);
-				//   i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				i.setData(Uri.parse(url));
 				startActivity(i);
 				Log.v(TAG, "Browser started");

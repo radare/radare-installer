@@ -207,8 +207,8 @@ public class Utils {
 
 	public void killradare() {
 		RootTools.useRoot = false;
-		if (RootTools.isProcessRunning("radare2")) {
-			RootTools.killProcess("radare2");
+		if (RootTools.isProcessRunning("bin/radare2")) {
+			RootTools.killProcess("bin/radare2");
 		}
 	}
 }
