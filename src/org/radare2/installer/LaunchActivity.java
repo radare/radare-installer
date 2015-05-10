@@ -23,13 +23,14 @@ import android.net.Uri;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.util.Log;
 
 import android.widget.Toast;
 import java.io.File;
 
 public class LaunchActivity extends Activity {
 
-	private Utils mUtils;
+	private Utils u;
 
 	private RadioGroup radiogroup;
 	private Button btnDisplay;
@@ -45,7 +46,7 @@ public class LaunchActivity extends Activity {
 			//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
-			mUtils.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
+			u.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
 		}
 		return ex;
 	}
@@ -55,7 +56,7 @@ public class LaunchActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 
-		mUtils = new Utils(getApplicationContext());
+		u = new Utils(getApplicationContext());
 
 		checkForRadare();
 		setContentView(R.layout.launch);
@@ -67,7 +68,7 @@ public class LaunchActivity extends Activity {
 		setContentView(R.layout.launch);
 
 		radiogroup = (RadioGroup) findViewById(R.id.radiogroup1);
-		String open_mode = mUtils.GetPref("open_mode");
+		String open_mode = u.GetPref("open_mode");
 		if (open_mode.equals("web")) {
 			radiogroup.check(R.id.radiobutton_web);
 		}
@@ -78,7 +79,7 @@ public class LaunchActivity extends Activity {
 			radiogroup.check(R.id.radiobutton_console);
 		}
 
-		String path = mUtils.GetPref("last_opened");
+		String path = u.GetPref("last_opened");
 		if (path.equals("unknown")) path = "/system/bin/toolbox";
 		if (Intent.ACTION_SEND.equals(action)) {
 			Uri uri = (Uri)bundle.get(Intent.EXTRA_STREAM);
@@ -101,7 +102,8 @@ public class LaunchActivity extends Activity {
 
 	@Override
 	public void onDestroy() {
-		mUtils.killradare();
+		// killing r2 here destroys the webview/browser views
+		//u.killRadare();
 		super.onDestroy();
 	}
 
@@ -114,25 +116,25 @@ public class LaunchActivity extends Activity {
 		file_to_open = (EditText) findViewById(R.id.file_to_open);
 		Bundle b = new Bundle();
 		b.putString("filename", arg+"\"" + file_to_open.getText().toString() + '"');
-		mUtils.StorePref("last_opened",file_to_open.getText().toString());
+		u.StorePref("last_opened",file_to_open.getText().toString());
 
 		switch (selectedId) {
 		case R.id.radiobutton_web :
-			mUtils.StorePref("open_mode","web");
+			u.StorePref("open_mode","web");
 			Intent intent1 = new Intent(LaunchActivity.this, WebActivity.class);
 			b.putString("mode", "web");
 			intent1.putExtras(b);
 			startActivity(intent1);
 			break;
 		case R.id.radiobutton_browser :
-			mUtils.StorePref("open_mode","browser");
+			u.StorePref("open_mode","browser");
 			Intent intent2 = new Intent(LaunchActivity.this, WebActivity.class);
 			b.putString("mode", "browser");
 			intent2.putExtras(b);
 			startActivity(intent2);
 			break;
 		case R.id.radiobutton_console :
-			mUtils.StorePref("open_mode","console");
+			u.StorePref("open_mode","console");
 			Intent intent3 = new Intent(LaunchActivity.this, LauncherActivity.class);
 			b.putString("mode", "console");
 			intent3.putExtras(b);
@@ -179,10 +181,10 @@ public class LaunchActivity extends Activity {
 			return true;
 		case 2:
 			try {
-				if (mUtils == null) {
-					mUtils = new Utils(getApplicationContext());
+				if (u == null) {
+					u = new Utils(getApplicationContext());
 				}
-				mUtils.myToast("authors: pof & pancake", Toast.LENGTH_SHORT);
+				u.myToast("authors: pof & pancake", Toast.LENGTH_SHORT);
 			} catch (Exception e) {
 				// err
 			}

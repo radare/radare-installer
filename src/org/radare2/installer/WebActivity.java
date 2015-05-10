@@ -36,15 +36,18 @@ import android.webkit.WebChromeClient;
 public class WebActivity extends Activity {
 
 	private static final String TAG = "radare2-WebActivity";
-	private Utils mUtils;
+	private static final String http_port_default = "9090";
+	private Utils u;
 
         WebView webview;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		SharedPreferences prefs = PreferenceManager.
+			getDefaultSharedPreferences(getApplicationContext());
 
-		mUtils = new Utils(getApplicationContext());
+		u = new Utils(getApplicationContext());
 
 		setContentView(R.layout.webactivity);
 
@@ -57,130 +60,135 @@ public class WebActivity extends Activity {
 			e.printStackTrace();
 		}
 		// make sure we don't start a second instance of radare webserver
-		mUtils.killradare();
+		u.killRadare();
 
 		Bundle b = getIntent().getExtras();
-		String file_to_open = b.getString("filename");
+		final String r2file = b.getString("filename");
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		boolean http_public = prefs.getBoolean("http_public", false);
-		String http_port = prefs.getString("http_port", "9090");
 
-		String port = http_port;
+		String r2args = "";
+
+		final String http_port = prefs.getString("http_port", http_port_default);
 		if (http_port.equals("")) {
-			http_port = " -e http.port=9090 ";
+			r2args += " -e http.port="+http_port_default+" ";
 		} else {
-			http_port = " -e http.port="+http_port;
+			r2args += " -e http.port="+http_port;
 		}
-		String http_eval = "";
 		if (http_public) {
-			//http_eval = "-e http.public=1";
 			// after 0.9.8
-			http_eval = " -e http.bind=public ";
+			r2args += " -e http.bind=public ";
 			String localip = getLocalIpAddress();
 			if (localip != null) {
-				mUtils.myToast("r2 http server\n" + localip + ":" + port, Toast.LENGTH_LONG);
+				u.myToast("r2 http server\n" + localip +
+					":" + http_port, Toast.LENGTH_LONG);
 				Log.v(TAG, "ip address: " + localip);
 			}
 		}
-		Log.v(TAG, "http_eval: " + http_eval);
 
-		String output = mUtils.exec("/data/data/org.radare2.installer/radare2/bin/radare2 " + 
-			http_port + http_eval + " -c=h " + file_to_open + " &");
+		String cmd = u.getPrefix()+"/bin/radare2"+
+			r2args + " -c=h \"" + r2file + "\" &";
+		// limit the stdout buffering to 512 bytes
+		String output = u.exec(cmd, 512);
 		Log.v(TAG, "radare2 started");
 
 		// if radare2 is launched in background we need to wait
 		// for it to start before opening the webview
-/*
-		try {
-			Thread.sleep(1000);
-		} catch (Exception e) {
-                        e.printStackTrace();
-                }
-*/
-
-		if (true) { //RootTools.isProcessRunning("radare2")) {
-			String open_mode = mUtils.GetPref("open_mode");
-			if (open_mode.equals("browser")) {
-				String url = "http://localhost:"+port;
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				i.setData(Uri.parse(url));
-				startActivity(i);
-				Log.v(TAG, "Browser started");
-			}
-			if (open_mode.equals("web")) {
+		Thread th = new Thread() {
+			@Override
+			public void run() {
 				try {
-					webview = (WebView) findViewById(R.id.webview);
-					webview.setWebViewClient(new RadareWebViewClient());
-					webview.setWebChromeClient(new WebChromeClient());
-					webview.getSettings().setJavaScriptEnabled(true);
-					webview.getSettings().setBuiltInZoomControls(true);
-					webview.getSettings().setSupportZoom(true);
-					webview.getSettings().setUseWideViewPort(true);
-					webview.getSettings().setLoadWithOverviewMode(true);
+					Thread.sleep(1500);
+					// Thread.sleep(1000);
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
-	/*
-				webview.getSettings().setAllowFileAccess(true);
-				webview.getSettings().setDomStorageEnabled(true);
-				webview.getSettings().setJavaScriptEnabled(true);
-				webview.getSettings().setSupportMultipleWindows(true);
-				webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-				webview.getSettings().setAppCacheMaxSize(1024*1024*16);
-				String appCachePath = "/data/data/" + getPackageName() + "/cache/";
-				webview.getSettings().setAppCachePath(appCachePath);
-				webview.getSettings().setAllowFileAccess(true);
-				webview.getSettings().setAppCacheEnabled(true);
-				webview.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-				webview.getSettings().setDatabaseEnabled(true);
-				String databasePath = "/data/data/" + getPackageName() + "/databases/";
-				webview.getSettings().setDatabasePath(databasePath);
-				webview.getSettings().setGeolocationEnabled(true);
-				webview.getSettings().setSaveFormData(true);
+				if (RootTools.isProcessRunning("radare2")) {
+					String open_mode = u.GetPref("open_mode");
+					if (open_mode.equals("browser")) {
+						String url = "http://localhost:"+http_port;
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						i.setData(Uri.parse(url));
+						startActivity(i);
+						Log.v(TAG, "Browser started");
+					} else if (open_mode.equals("web")) {
+						try {
+							webview = (WebView) findViewById(R.id.webview);
+							webview.setWebViewClient(new RadareWebViewClient());
+							webview.setWebChromeClient(new WebChromeClient());
+							webview.getSettings().setJavaScriptEnabled(true);
+							webview.getSettings().setBuiltInZoomControls(true);
+							webview.getSettings().setSupportZoom(true);
+							webview.getSettings().setUseWideViewPort(true);
+							webview.getSettings().setLoadWithOverviewMode(true);
+						} catch (Exception e) {
+						}
+						/*
+						   webview.getSettings().setAllowFileAccess(true);
+						   webview.getSettings().setDomStorageEnabled(true);
+						   webview.getSettings().setJavaScriptEnabled(true);
+						   webview.getSettings().setSupportMultipleWindows(true);
+						   webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+						   webview.getSettings().setAppCacheMaxSize(1024*1024*16);
+						   String appCachePath = "/data/data/" + getPackageName() + "/cache/";
+						   webview.getSettings().setAppCachePath(appCachePath);
+						   webview.getSettings().setAllowFileAccess(true);
+						   webview.getSettings().setAppCacheEnabled(true);
+						   webview.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+						   webview.getSettings().setDatabaseEnabled(true);
+						   String databasePath = "/data/data/" + getPackageName() + "/databases/";
+						   webview.getSettings().setDatabasePath(databasePath);
+						   webview.getSettings().setGeolocationEnabled(true);
+						   webview.getSettings().setSaveFormData(true);
 
-				webview.getSettings().setAllowContentAccess(true);
-				webview.getSettings().setAllowFileAccess(true);
-				//    webview.getSettings().setAllowFileAccessFromFileURLs(true);
-				//    webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
-				webview.getSettings().setAppCacheEnabled(true);
-				webview.getSettings().setBuiltInZoomControls(true);
-				webview.getSettings().setDatabaseEnabled(true);
-				webview.getSettings().setDisplayZoomControls(true);
-				webview.getSettings().setDomStorageEnabled(true);
-				webview.getSettings().setEnableSmoothTransition(true);
-				webview.getSettings().setGeolocationEnabled(true);
-				webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-				webview.getSettings().setJavaScriptEnabled(true);
-				webview.getSettings().setLightTouchEnabled(true);
-				webview.getSettings().setLoadWithOverviewMode(true);
-				webview.getSettings().setLoadsImagesAutomatically(true);
-				webview.getSettings().setPluginsEnabled(true);
-				webview.getSettings().setSupportMultipleWindows(true);
-				webview.getSettings().setSupportZoom(true);
-				webview.getSettings().setUseWideViewPort(true);
-				webview.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
+						   webview.getSettings().setAllowContentAccess(true);
+						   webview.getSettings().setAllowFileAccess(true);
+						//    webview.getSettings().setAllowFileAccessFromFileURLs(true);
+						//    webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
+						webview.getSettings().setAppCacheEnabled(true);
+						webview.getSettings().setBuiltInZoomControls(true);
+						webview.getSettings().setDatabaseEnabled(true);
+						webview.getSettings().setDisplayZoomControls(true);
+						webview.getSettings().setDomStorageEnabled(true);
+						webview.getSettings().setEnableSmoothTransition(true);
+						webview.getSettings().setGeolocationEnabled(true);
+						webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+						webview.getSettings().setJavaScriptEnabled(true);
+						webview.getSettings().setLightTouchEnabled(true);
+						webview.getSettings().setLoadWithOverviewMode(true);
+						webview.getSettings().setLoadsImagesAutomatically(true);
+						webview.getSettings().setPluginsEnabled(true);
+						webview.getSettings().setSupportMultipleWindows(true);
+						webview.getSettings().setSupportZoom(true);
+						webview.getSettings().setUseWideViewPort(true);
+						webview.getSettings().setPluginState(android.webkit.WebSettings.PluginState.ON_DEMAND);
 
-				webview.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
-				webview.setScrollbarFadingEnabled(false);
-				webview.setHorizontalScrollBarEnabled(false);
-	*/
-				webview.loadUrl("http://localhost:"+port);
-				Log.v(TAG, "WebView started successfully");
+						webview.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
+						webview.setScrollbarFadingEnabled(false);
+						webview.setHorizontalScrollBarEnabled(false);
+						 */
+						webview.loadUrl("http://localhost:"+http_port);
+						Log.v(TAG, "WebView started successfully");
+					} else {
+						Log.v(TAG, "Invalid web mode");
+					}
+				} else {
+					Log.v(TAG, "could not open file" + r2file);
+					u.myToast("Could not open file " + r2file, Toast.LENGTH_SHORT);
+					Log.v(TAG, "finishing WebActivity");
+					//finish();
+				}
 			}
-		} else {
-			Log.v(TAG, "could not open file" + file_to_open);
-			mUtils.myToast("Could not open file " + file_to_open, Toast.LENGTH_SHORT);
-			Log.v(TAG, "finishing WebActivity");
-			//finish();
-		}
+		};
+		th.start();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		Log.v(TAG, "onStop() called");
-		mUtils.killradare();
+//		u.killRadare();
 	}
 
 	private class RadareWebViewClient extends WebViewClient {
@@ -193,7 +201,7 @@ public class WebActivity extends Activity {
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 			Log.v(TAG, "Error: radare2 webserver did not start");
-			mUtils.myToast("Error: radare2 webserver did not start", Toast.LENGTH_LONG);
+			u.myToast("Error: radare2 webserver did not start", Toast.LENGTH_LONG);
 			//finish();
 		}
 	}
@@ -203,7 +211,7 @@ public class WebActivity extends Activity {
 			if ((keyCode == KeyEvent.KEYCODE_BACK) && webview.canGoBack()) {
 				Log.v(TAG, "onKeyDown() called");
 				//webview.goBack();
-				mUtils.killradare();
+				u.killRadare();
 				//finish();
 				return true;
 			}

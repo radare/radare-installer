@@ -21,7 +21,7 @@ sdk.dir:
 	@false
 
 build: sdk.dir
-	ant ${BUILD}
+	ant -Djava.compilerargs=-Xlint ${BUILD}
 
 clean:
 	ant clean
@@ -75,5 +75,4 @@ suid:
 	$(ADB) shell chown root:root ${R2BIN}
 	$(ADB) shell chmod 4755 ${R2BIN}
 	
-
-.PHONY: test install uninstall build
+.PHONY: test install uninstall build align sign

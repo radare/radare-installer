@@ -132,6 +132,10 @@ public class Utils {
 		return arch;
 	}
 
+	public String getPrefix() {
+		return "/data/data/org.radare2.installer/radare2/";
+	}
+
 	public final boolean isInternetAvailable(){
 	// check if we are connected to the internet
 		ConnectivityManager connectivityManager = (ConnectivityManager)mContext.getSystemService(mContext.CONNECTIVITY_SERVICE);
@@ -183,21 +187,33 @@ public class Utils {
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
 		//  Send the notification
-		nm.notify( 1, notification );
+		nm.notify(1, notification);
 	}
 
 	public String exec(String command) {
+		return exec(command, 0);
+	}
+
+	public String exec(String command, int maxbufsize) {
 		final StringBuffer radare_output = new StringBuffer();
+		final long maxbuf = maxbufsize;
 		Command command_out = new Command(0, command)
 		{
+			private boolean filled = false;
+
 			@Override
-			public void output(int id, String line)
-			{
+			public void output(int id, String line) {
+				if (filled) {
+					return;
+				}
+				if ((maxbuf > 0) && (radare_output.length() > maxbuf)) {
+					filled = true;
+					return;
+				}
 				radare_output.append(line);
 			}
 		};
 		try {
-			RootTools.getShell(RootTools.useRoot);
 			RootTools.getShell(RootTools.useRoot).add(command_out).waitForFinish();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,7 +221,7 @@ public class Utils {
 		return radare_output.toString();
 	}
 
-	public void killradare() {
+	public void killRadare() {
 		RootTools.useRoot = false;
 		if (RootTools.isProcessRunning("bin/radare2")) {
 			RootTools.killProcess("bin/radare2");
