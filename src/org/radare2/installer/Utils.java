@@ -40,11 +40,16 @@ import android.os.Environment;
 
 import android.os.StatFs;
 
+import com.stericson.RootShell.execution.*;
+import com.stericson.RootShell.exceptions.*;
+import com.stericson.RootShell.containers.*;
+import com.stericson.RootShell.*;
 import com.stericson.RootTools.*;
 
 public class Utils {
 
 	private Context mContext;
+	public boolean useRoot;
 
 	public Utils(Context context) {
 		mContext = context;
@@ -202,7 +207,7 @@ public class Utils {
 			private boolean filled = false;
 
 			@Override
-			public void output(int id, String line) {
+			public void commandOutput(int id, String line) {
 				if (filled) {
 					return;
 				}
@@ -214,7 +219,17 @@ public class Utils {
 			}
 		};
 		try {
-			RootTools.getShell(RootTools.useRoot).add(command_out).waitForFinish();
+			Command cmd = RootTools.getShell(this.useRoot).add(command_out);
+			//cmd.waitForFinish();
+			while (cmd.isExecuting()) {
+				try {
+					Thread.sleep (1000);
+				} catch (Exception e) {
+					/* do nothing */
+				}
+			}
+			Thread.sleep (1000);
+			// must be async with a commandhandler for COMMAND_COMPLETED:
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -222,7 +237,7 @@ public class Utils {
 	}
 
 	public void killRadare() {
-		RootTools.useRoot = false;
+		//RootTools.useRoot = false;
 		if (RootTools.isProcessRunning("bin/radare2")) {
 			RootTools.killProcess("bin/radare2");
 		}

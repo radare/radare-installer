@@ -51,11 +51,11 @@ public class WebActivity extends Activity {
 
 		setContentView(R.layout.webactivity);
 
-		RootTools.useRoot = false;
+		u.useRoot = false;
 
 		// get shell first
 		try {
-			RootTools.getShell(RootTools.useRoot);
+			RootTools.getShell(u.useRoot);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

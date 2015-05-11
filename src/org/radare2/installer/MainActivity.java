@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 	private Button localRunButton;
 	
 	private Context context;
-	private Utils mUtils;
+	private Utils u;
 	/* TODO: use https, verify, signify */
 	private String http_url_default = "http://radare.org/get/pkg/android/";
 
@@ -53,17 +53,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		mUtils = new Utils(getApplicationContext());
+		u = new Utils(getApplicationContext());
 
 		CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox);
 		CheckBox checkHg = (CheckBox) findViewById(R.id.checkhg);
 		CheckBox checkLocal = (CheckBox) findViewById(R.id.checklocal);
 
-		String root = mUtils.GetPref("root");
+		String root = u.GetPref("root");
 		if (root.equals("yes")) checkBox.setChecked(true);
 		else checkBox.setChecked(false);
 
-		String version = mUtils.GetPref("version");
+		String version = u.GetPref("version");
 		if (version.equals("unstable")) checkHg.setChecked(true);
 		if (version.equals("stable")) checkHg.setChecked(false);
 
@@ -76,22 +76,22 @@ public class MainActivity extends Activity {
 
 		output ("Welcome to radare2 installer!\nMake your selections on the checkbox above and click the INSTALL button to begin.\nYou can access more settings by pressing the menu button.\n\n");
 
-		if (mUtils.isInternetAvailable()) {
+		if (u.isInternetAvailable()) {
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			Thread thread = new Thread(new Runnable() {
 				public void run() {
-					String version = mUtils.GetPref("version");
-					String ETag = mUtils.GetPref("ETag");
-					RootTools.useRoot = false;
+					String version = u.GetPref("version");
+					String ETag = u.GetPref("ETag");
+					//RootTools.useRoot = false;
 					if (!version.equals("unknown") && !ETag.equals("unknown") && RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2")) {
 						output ("radare2 " + version + " is installed.\n");
-						String arch = mUtils.GetArch();
+						String arch = u.GetArch();
 						String http_url = prefs.getString ("http_url", http_url_default);
 						String url = http_url + "/" + arch + "/" + version;
-						boolean update = mUtils.UpdateCheck(url);
+						boolean update = u.UpdateCheck(url);
 						if (update) {
 							output ("New radare2 " + version + " version available!\nClick INSTALL to update now.\n");
-							//mUtils.SendNotification("Radare2 update", "New radare2 " + version + " version available!\n");
+							//u.SendNotification("Radare2 update", "New radare2 " + version + " version available!\n");
 						}
 					}
 				}
@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);      
 			} else {
-				mUtils.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
+				u.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
 			}
 		}
 	};
@@ -184,7 +184,7 @@ public class MainActivity extends Activity {
 					String url;
 					String hg;
 					String output;
-					String arch = mUtils.GetArch();
+					String arch = u.GetArch();
 					String cpuabi = Build.CPU_ABI;
 
 					output ("Detected CPU: " + cpuabi + " (" + arch +")\n");
@@ -200,7 +200,7 @@ public class MainActivity extends Activity {
 					}
 
 					// store installed version in preferences
-					mUtils.StorePref("version", hg);
+					u.StorePref("version", hg);
 
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 					String http_url = prefs.getString ("http_url", http_url_default);
@@ -209,28 +209,28 @@ public class MainActivity extends Activity {
 					// fix broken stable URL in radare2 0.9
 					
 //					if (cpuabi.matches(".*arm.*")) {
-//						boolean update = mUtils.UpdateCheck(url);
+//						boolean update = u.UpdateCheck(url);
 //						if (!update) {
 //							if (!checkHg.isChecked()) url = "http://x90.es/radare2tar";
 //							else url = "http://x90.es/radare2git"; //for my tests
 //						}
 //					} 
 
-					RootTools.useRoot = false;
+					//RootTools.useRoot = false;
 					// remove old traces of previous r2 install
-					mUtils.exec("rm -rf /data/data/org.radare2.installer/radare2/");
-					mUtils.exec("rm -rf /data/rata/org.radare2.installer/files/");
-					mUtils.exec("rm /data/data/org.radare2.installer/radare-android.tar");
-					mUtils.exec("rm /data/data/org.radare2.installer/radare-android.tar.gz");
+					u.exec("rm -rf /data/data/org.radare2.installer/radare2/");
+					u.exec("rm -rf /data/rata/org.radare2.installer/files/");
+					u.exec("rm /data/data/org.radare2.installer/radare-android.tar");
+					u.exec("rm /data/data/org.radare2.installer/radare-android.tar.gz");
 
 					boolean use_sdcard = prefs.getBoolean("use_sdcard", false);
 
-					String storagePath = mUtils.GetStoragePath();
+					String storagePath = u.GetStoragePath();
 
 					long space = 0;
 					long minSpace = 15;
 
-					space = (mUtils.getFreeSpace("/data") / (1024*1024));
+					space = (u.getFreeSpace("/data") / (1024*1024));
 					output("Free space on data partition: " + space + "MB\n");
 
 					if (space <= 0) {
@@ -241,9 +241,9 @@ public class MainActivity extends Activity {
 					}
 
 					if (use_sdcard) {
-						mUtils.exec("rm -rf " + storagePath);
+						u.exec("rm -rf " + storagePath);
 						//output("StoragePath = " + storagePath + "\n");
-						space = (mUtils.getFreeSpace(storagePath.replace("/org.radare2.installer/","")) / (1024*1024));
+						space = (u.getFreeSpace(storagePath.replace("/org.radare2.installer/","")) / (1024*1024));
 						output("Free space on external storage: " + space + "MB\n");
 						if (space < minSpace) {	
 							output("Warning: low space on external storage\n");
@@ -272,14 +272,14 @@ public class MainActivity extends Activity {
 						}
 					}
 
-					if (mUtils.isInternetAvailable() == false) {
-						output("\nCan't connect to download server. Check that internet connection is available.\n");
+					if (u.isInternetAvailable() == false) {
+						output("\nCan't connect to download server.");
+						output("\nCheck that internet connection is available.\n");
 					} else {
-
-						RootTools.useRoot = false;
+						//RootTools.useRoot = false;
 						// remove old traces of previous r2 download
-						mUtils.exec("rm " + localPathTar);
-						mUtils.exec("rm " + localPath);
+						u.exec("rm " + localPathTar);
+						u.exec("rm " + localPath);
 
 						CheckBox checkLocal = (CheckBox) findViewById(R.id.checklocal);
 						if (checkLocal.isChecked()) {
@@ -310,28 +310,29 @@ public class MainActivity extends Activity {
 
 						output("done\n");
 						// make sure we delete temporary files
-						mUtils.exec("rm " + localPathTar);
+						u.exec("rm " + localPathTar);
 						// only remove tarball if origin is network
 						if (!checkLocal.isChecked()) {
-							mUtils.exec("rm " + localPath);
+							u.exec("rm " + localPath);
 						}
 
+						String pfx = u.getPrefix();
 						// make sure bin files are executable
-						mUtils.exec("chmod 755 /data/data/org.radare2.installer/radare2/bin/*");
-						mUtils.exec("chmod 755 /data/data/org.radare2.installer/radare2/bin/");
-						mUtils.exec("chmod 755 /data/data/org.radare2.installer/radare2/");
+						u.exec("chmod 755 "+pfx+"/bin/*");
+						u.exec("chmod 755 "+pfx+"/bin/");
+						u.exec("chmod 755 "+pfx);
 
 						// make sure lib files are readable by other apps (for webserver using -c=h)
-						mUtils.exec("chmod -R 755 /data/data/org.radare2.installer/radare2/lib/");
+						u.exec("chmod -R 755 "+pfx+"/lib");
 
 						// setup temp folder for r2
 						output("Create temporary directory... ");
-						mUtils.exec("rm -rf /data/data/org.radare2.installer/radare2/tmp/*");
-						mUtils.exec("rm -rf /data/data/org.radare2.installer/radare2/tmp");
+						u.exec("rm -rf "+pfx+"/tmp");
+						u.exec("rm -rf "+pfx+"/tmp");
 						dir.mkdirs(); // better than shell mkdir
-						mUtils.exec("chmod 1777 " + storagePath + "/radare2/tmp/");
+						u.exec("chmod 1777 " + storagePath + "/radare2/tmp/");
 						if (use_sdcard) {
-							mUtils.exec ("ln -s " + storagePath + "/radare2/tmp /data/data/org.radare2.installer/radare2/tmp");
+							u.exec ("ln -s " + storagePath + "/radare2/tmp "+pfx+"/tmp");
 						}
 						output("done\n");
 
@@ -343,19 +344,19 @@ public class MainActivity extends Activity {
 
 							if (!isRooted) {
 								output("\nCould not create xbin symlinks, got root?\n");
-								mUtils.StorePref("root","no");
+								u.StorePref("root","no");
 							} else { // device is rooted
 
-								mUtils.StorePref("root","yes");
+								u.StorePref("root","yes");
 
-								RootTools.useRoot = true;
+								//RootTools.useRoot = true;
 
 								output("\nCreating xbin symlinks...\n");
 								RootTools.remount("/system", "rw");
 								// remove old path
-								mUtils.exec("rm -rf /data/local/radare2");
+								u.exec("rm -rf /data/local/radare2");
 								// remove old symlinks in case they exist in old location
-								mUtils.exec("rm -f /system/xbin/radare2"
+								u.exec("rm -f /system/xbin/radare2"
 									+" /system/xbin/r2"
 									+" /system/xbin/rabin2"
 									+" /system/xbin/radiff2"
@@ -368,19 +369,19 @@ public class MainActivity extends Activity {
 									+" /system/xbin/rafind2"
 									+" /system/xbin/ragg2-cc");
 
-								if (RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2")) {
+								if (RootTools.exists(pfx+"/bin/radare2")) {
 
 									// show output for the first link, in case there's any error with su
-									output = mUtils.exec("ln -s /data/data/org.radare2.installer/radare2/bin/radare2 /system/xbin/radare2 2>&1");
+									output = u.exec("ln -s "+pfx+"/bin/radare2 /system/xbin/radare2 2>&1");
 									if (!output.equals("")) output(output);
 
 									String file;
-									File folder = new File("/data/data/org.radare2.installer/radare2/bin/");
+									File folder = new File(pfx+"/bin/");
 									File[] listOfFiles = folder.listFiles(); 
 									for (int i = 0; i < listOfFiles.length; i++) {
 										if (listOfFiles[i].isFile()) {
 											file = listOfFiles[i].getName();
-											mUtils.exec("ln -s /data/data/org.radare2.installer/radare2/bin/" + file + " /system/xbin/" + file);
+											u.exec("ln -s "+pfx+"/bin/" + file + " /system/xbin/" + file);
 											output("linking /system/xbin/" + file + "\n");
 										}
 									}
@@ -395,17 +396,17 @@ public class MainActivity extends Activity {
 									symlinksCreated = false;
 								}
 
-								RootTools.useRoot = false;
+							//	RootTools.useRoot = false;
 							}
 						}
 
-						RootTools.useRoot = false;
-						if (!RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2")) {
+						//RootTools.useRoot = false;
+						if (!RootTools.exists(pfx+"/bin/radare2")) {
 							output("\n\nsomething went wrong during installation :(\n");
 						} else {
 							//if (!symlinksCreated) output("\nRadare2 is installed in:\n   /data/data/org.radare2.installer/radare2/\n");
 							output("\nTesting installation:\n\n$ radare2 -v\n");
-							output = mUtils.exec("/data/data/org.radare2.installer/radare2/bin/radare2 -v");
+							output = u.exec(pfx+"/bin/radare2 -v");
 							if (!output.equals("")) output(output);
 							else output("Radare was not installed successfully, make sure you have enough space in /data and try again.");
 						}
@@ -444,7 +445,7 @@ public class MainActivity extends Activity {
 		//first we create the gunzipped tarball...
 		OutputStream out = new FileOutputStream(tempPath);
 
-		byte[] data = new byte[1024];
+		byte[] data = new byte[4096];
 		int len;
 		while ((len = gzipInputStream.read(data)) > 0) {
 			out.write(data, 0, len);
@@ -480,9 +481,9 @@ public class MainActivity extends Activity {
 			urlconn.getRequestProperties();
 			urlconn.connect();
 			int sLength = urlconn.getContentLength();
-			output ("TARBALL SIZE "+(sLength/1024/1024)+" MB\n");
+			output ("Tarball size "+(sLength/1024/1024)+" MB\n");
 			String mETag = urlconn.getHeaderField("ETag");
-			mUtils.StorePref("ETag",mETag);
+			u.StorePref("ETag",mETag);
 			InputStream in = urlconn.getInputStream();
 			FileOutputStream out = new FileOutputStream(localPath);
 			boolean stopped = false;
@@ -538,7 +539,9 @@ public class MainActivity extends Activity {
 			Intent i = new Intent(MainActivity.this, UpdateCheckerService.class);
 			PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
 			am.cancel(pi);
-			am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + hours*60*60*1000, hours*60*60*1000, pi);
+			am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+				SystemClock.elapsedRealtime() + hours*60*60*1000,
+				hours*60*60*1000, pi);
 		}
 	}
 }
