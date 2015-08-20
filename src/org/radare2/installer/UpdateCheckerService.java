@@ -69,8 +69,10 @@ public class UpdateCheckerService extends Service {
 			String ETag = mUtils.GetPref("ETag");
 			if (!version.equals("unknown") && !ETag.equals("unknown")) {
 				String arch = mUtils.GetArch();
+				// TODO: useGithub must honor user settings
+				boolean useGithub = true;
 				String url = "http://radare.org/get/pkg/android/" + arch + "/" + version;
-				update = mUtils.UpdateCheck(url);
+				update = mUtils.UpdateCheck(url, useGithub);
 			}
 
 			return null;
