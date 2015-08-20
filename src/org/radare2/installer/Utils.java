@@ -279,4 +279,12 @@ public class Utils {
 			RootTools.killProcess("bin/radare2");
 		}
 	}
+
+	public void sleep(int secs) {
+		try {
+                        Thread.sleep(secs * 1000);
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+	}
 }

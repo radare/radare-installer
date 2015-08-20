@@ -89,15 +89,8 @@ public class WebActivity extends Activity {
 			http_port + http_eval + " -c=h " + file_to_open + " &");
 		Log.v(TAG, "radare2 started");
 
-		// if radare2 is launched in background we need to wait
-		// for it to start before opening the webview
-/*
-		try {
-			Thread.sleep(1000);
-		} catch (Exception e) {
-                        e.printStackTrace();
-                }
-*/
+		mUtils.sleep (1);
+
 		if (true) { //RootTools.isProcessRunning("radare2")) {
 			String open_mode = mUtils.GetPref("open_mode");
 			if (open_mode.equals("browser")) {
@@ -176,11 +169,19 @@ public class WebActivity extends Activity {
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.v(TAG, "onDestroy() called");
+		mUtils.killradare();
+	}
+/*
+	@Override
 	public void onStop() {
 		super.onStop();
 		Log.v(TAG, "onStop() called");
 		mUtils.killradare();
 	}
+*/
 
 	private class RadareWebViewClient extends WebViewClient {
 		@Override
@@ -191,6 +192,12 @@ public class WebActivity extends Activity {
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			String port = prefs.getString("http_port", "9090");
+			mUtils.sleep (1);
+			// reload page
+			view.loadUrl("http://localhost:"+port);
+			// retry in few seconds
 			Log.v(TAG, "Error: radare2 webserver did not start");
 			mUtils.myToast("Error: radare2 webserver did not start", Toast.LENGTH_LONG);
 			//finish();
