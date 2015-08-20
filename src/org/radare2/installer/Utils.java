@@ -124,11 +124,11 @@ public class Utils {
 		String arch = "arm";
 		String cpuabi = Build.CPU_ABI;
 
-		if (cpuabi.matches(".*mips64.*")) arch="mips64";
-		else if (cpuabi.matches(".*mips.*")) arch="mips";
-		else if (cpuabi.matches(".*x86.*")) arch="x86";
-		else if (cpuabi.matches(".*arm64.*")) arch="aarch64";
-		else if (cpuabi.matches(".*arm.*")) arch="arm";
+		if (cpuabi.matches(".*mips64.*")) arch= "mips64";
+		else if (cpuabi.matches(".*mips.*")) arch = "mips";
+		else if (cpuabi.matches(".*x86.*")) arch = "x86";
+		else if (cpuabi.matches(".*arm64.*")) arch = "aarch64";
+		else if (cpuabi.matches(".*arm.*")) arch = "arm";
 		return arch;
 	}
 
@@ -150,6 +150,8 @@ public class Utils {
 			urlconn.setRequestMethod("GET");
 			urlconn.setInstanceFollowRedirects(true);
 			urlconn.getRequestProperties();
+			/* 20 seconds connect timeout */
+			urlconn.setConnectTimeout(20000);
 			urlconn.connect();
 			String mETag = urlconn.getHeaderField("ETag");
 			urlconn.disconnect();
