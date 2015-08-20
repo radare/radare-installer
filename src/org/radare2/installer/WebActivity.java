@@ -72,21 +72,19 @@ public class WebActivity extends Activity {
 		} else {
 			http_port = " -e http.port="+http_port;
 		}
-		String http_eval = "";
+		String r2args = "";
 		if (http_public) {
-			//http_eval = "-e http.public=1";
-			// after 0.9.8
-			http_eval = " -e http.bind=public ";
+			r2args = " -e http.bind=public ";
 			String localip = getLocalIpAddress();
 			if (localip != null) {
 				mUtils.myToast("r2 http server\n" + localip + ":" + port, Toast.LENGTH_LONG);
 				Log.v(TAG, "ip address: " + localip);
 			}
 		}
-		Log.v(TAG, "http_eval: " + http_eval);
+		Log.v(TAG, "r2args: " + r2args);
 
 		String output = mUtils.exec("/data/data/org.radare2.installer/radare2/bin/radare2 " + 
-			http_port + http_eval + " -c=h " + file_to_open + " &");
+			http_port + r2args + " -c=h " + file_to_open + " &");
 		Log.v(TAG, "radare2 started");
 
 		mUtils.sleep (1);
