@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 	
 	private Context context;
 	private Utils mUtils;
-	/* TODO: use https, verify, signify */
+	/* This is insecure update method. github should be the only download method */
 	private String http_url_default = "http://radare.org/get/pkg/android/";
 
 	/** Called when the activity is first created. */
@@ -88,7 +88,9 @@ public class MainActivity extends Activity {
 						String arch = mUtils.GetArch();
 						String http_url = prefs.getString ("http_url", http_url_default);
 						String url = http_url + "/" + arch + "/" + version;
-						boolean update = mUtils.UpdateCheck(url);
+						final CheckBox checkGithub = (CheckBox) findViewById(R.id.checkGithub);
+						boolean useGithub = checkGithub.isChecked();
+						boolean update = mUtils.UpdateCheck(url, useGithub);
 						if (update) {
 							output ("New radare2 " + version + " version available!\nClick INSTALL to update now.\n");
 							//mUtils.SendNotification("Radare2 update", "New radare2 " + version + " version available!\n");
@@ -170,6 +172,7 @@ public class MainActivity extends Activity {
 			final CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox);
 			final CheckBox checkHg = (CheckBox) findViewById(R.id.checkhg);
 			final CheckBox checkLocal = (CheckBox) findViewById(R.id.checklocal);
+			final CheckBox checkGithub = (CheckBox) findViewById(R.id.checkGithub);
 
 			thread = new Thread(new Runnable() {
 				private void resetButtons() {
@@ -203,11 +206,17 @@ public class MainActivity extends Activity {
 					mUtils.StorePref("version", hg);
 
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-					String http_url = prefs.getString ("http_url", http_url_default);
-					url = http_url + "/" + arch + "/" + hg;
+					if (checkGithub.isChecked()) {
+						String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
+						String version = "0.10.0-git";
+						url = http_url + "/android-" + arch + "/radare2-" + version + "-android-" + arch + ".tar.gz";
+					} else {
+						String http_url = prefs.getString ("http_url", http_url_default);
+						url = http_url + "/" + arch + "/" + hg;
+					}
+					output(url+"\n");
 
 					// fix broken stable URL in radare2 0.9
-					
 //					if (cpuabi.matches(".*arm.*")) {
 //						boolean update = mUtils.UpdateCheck(url);
 //						if (!update) {
@@ -275,13 +284,13 @@ public class MainActivity extends Activity {
 					if (mUtils.isInternetAvailable() == false) {
 						output("\nCan't connect to download server. Check that internet connection is available.\n");
 					} else {
-
 						RootTools.useRoot = false;
 						// remove old traces of previous r2 download
 						mUtils.exec("rm " + localPathTar);
 						mUtils.exec("rm " + localPath);
 
 						CheckBox checkLocal = (CheckBox) findViewById(R.id.checklocal);
+
 						if (checkLocal.isChecked()) {
 							localPath = prefs.getString ("local_url", "/sdcard/radare2-android.tar.gz");
 						} else {
@@ -296,7 +305,6 @@ public class MainActivity extends Activity {
 							} else {
 								output("Uncompressing tarball... ");
 							}
-
 						}
 						try {
 							unTarGz(localPath, storagePath + "/radare2/tmp/");
@@ -401,7 +409,7 @@ public class MainActivity extends Activity {
 
 						RootTools.useRoot = false;
 						if (!RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2")) {
-							output("\n\nsomething went wrong during installation :(\n");
+							output("\n\nSomething went wrong during installation :(\n");
 						} else {
 							//if (!symlinksCreated) output("\nRadare2 is installed in:\n   /data/data/org.radare2.installer/radare2/\n");
 							output("\nTesting installation:\n\n$ radare2 -v\n");
@@ -472,6 +480,14 @@ public class MainActivity extends Activity {
 	}
 
 	private boolean download(String urlStr, String localPath) {
+		final CheckBox checkGithub = (CheckBox) findViewById(R.id.checkGithub);
+		boolean useGithub = checkGithub.isChecked();
+		if (useGithub) {
+			String readme = mUtils.getGithubREADME();
+			if (readme != null) {
+				output ("\n"+readme+"\n");
+			}
+		}
 		try {
 			URL url = new URL(urlStr);
 			HttpURLConnection urlconn = (HttpURLConnection)url.openConnection();

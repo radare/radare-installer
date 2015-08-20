@@ -8,6 +8,7 @@ package org.radare2.installer;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.widget.*;
 
 import android.view.LayoutInflater;
 import android.view.Gravity;
@@ -36,6 +37,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import android.os.Environment;
 
 import android.os.StatFs;
@@ -142,7 +145,7 @@ public class Utils {
 		return connectivityManager.getActiveNetworkInfo().isConnected();
 	}
 
-	public boolean UpdateCheck(String urlStr) {
+	private boolean updateCheckInsecure(String urlStr) {
 		boolean update = false;
 		try {
 			URL url = new URL(urlStr);
@@ -153,18 +156,81 @@ public class Utils {
 			/* 20 seconds connect timeout */
 			urlconn.setConnectTimeout(20000);
 			urlconn.connect();
-			String mETag = urlconn.getHeaderField("ETag");
+
+			String etag = urlconn.getHeaderField("ETag");
 			urlconn.disconnect();
 			String ETag = GetPref("ETag");
-			if (!ETag.equals(mETag)) {
+			if (!ETag.equals(etag)) {
 				update = true;
-				//if (mETag.equals("\"3401f-1fba4e-4c8c2d3f37100\"")) update = false; // for my tests (git)
-				//if (mETag.equals("\"1a6f2-affb8c-4b366f9fd3640\"")) update = false; // for my tests (stable)
+				//if (etag.equals("\"3401f-1fba4e-4c8c2d3f37100\"")) update = false; // for my tests (git)
+				//if (etag.equals("\"1a6f2-affb8c-4b366f9fd3640\"")) update = false; // for my tests (stable)
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return update;
+	}
+
+	private boolean updateCheckGithub() {
+		boolean update = false;
+		try {
+			String arch = this.GetArch();
+
+			String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
+			String urlStr = http_url + "/android-" + arch + "/README.md";
+
+			URL url = new URL(urlStr);
+			HttpURLConnection urlconn = (HttpURLConnection)url.openConnection();
+			urlconn.setRequestMethod("GET");
+			urlconn.setInstanceFollowRedirects(true);
+			urlconn.getRequestProperties();
+			/* 20 seconds connect timeout */
+			urlconn.setConnectTimeout(20000);
+			urlconn.connect();
+			String etag = urlconn.getHeaderField("ETag");
+			urlconn.disconnect();
+			String last_etag = GetPref("ETag");
+			update = !etag.equals(last_etag);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return update;
+	}
+
+	public boolean UpdateCheck(String urlStr, boolean useGithub) {
+		if (useGithub) {
+			return updateCheckGithub ();
+		}
+		return updateCheckInsecure (urlStr);
+	}
+
+	public String getGithubREADME() {
+		try {
+			String arch = this.GetArch();
+			String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
+			String urlStr = http_url + "/android-" + arch + "/README.md";
+
+			URL url = new URL(urlStr);
+			HttpURLConnection urlconn = (HttpURLConnection)url.openConnection();
+			urlconn.setRequestMethod("GET");
+			urlconn.setInstanceFollowRedirects(true);
+			urlconn.getRequestProperties();
+			/* 20 seconds connect timeout */
+			urlconn.setConnectTimeout(20000);
+			BufferedReader br = null;
+			if (urlconn.getResponseCode() != 400) {
+				br = new BufferedReader(new InputStreamReader((urlconn.getInputStream())));
+				String output;
+				StringBuilder builder = new StringBuilder();
+				System.out.println("Output from Server .... \n");
+				while ((output = br.readLine()) != null) 
+					builder.append(output+"\n");
+				return builder.toString();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void SendNotification(String title, String message) {

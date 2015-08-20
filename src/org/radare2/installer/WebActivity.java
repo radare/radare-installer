@@ -98,7 +98,6 @@ public class WebActivity extends Activity {
                         e.printStackTrace();
                 }
 */
-
 		if (true) { //RootTools.isProcessRunning("radare2")) {
 			String open_mode = mUtils.GetPref("open_mode");
 			if (open_mode.equals("browser")) {
