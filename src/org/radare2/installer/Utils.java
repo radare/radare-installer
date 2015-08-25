@@ -5,6 +5,18 @@ radare2 installer for Android
 */
 package org.radare2.installer;
 
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import java.security.NoSuchAlgorithmException;
+import java.security.KeyManagementException;
+import java.io.IOException;
+import java.net.ProtocolException;
+
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -44,6 +56,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import com.stericson.RootTools.*;
+//import org.radare2.installer.PubKeyManager;
 
 public class Utils {
 
@@ -171,21 +184,36 @@ public class Utils {
 		return update;
 	}
 
+	public HttpsURLConnection getGithubConnection(String path) throws
+			NoSuchAlgorithmException,
+			KeyManagementException,
+			MalformedURLException,
+			IOException,
+			ProtocolException {
+		String arch = this.GetArch();
+		String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
+		String urlStr = http_url + "/android-" + arch + "/" + path;
+
+		TrustManager tm[] = { new PubKeyManager() };
+		SSLContext context = SSLContext.getInstance("TLS");
+		context.init (null, tm, null);
+
+		URL url = new URL(urlStr);
+		HttpsURLConnection urlconn = (HttpsURLConnection)url.openConnection();
+		urlconn.setSSLSocketFactory(context.getSocketFactory());
+
+		urlconn.setRequestMethod("GET");
+		urlconn.setInstanceFollowRedirects(true);
+		urlconn.getRequestProperties();
+		/* 20 seconds connect timeout */
+		urlconn.setConnectTimeout(20000);
+		return urlconn;
+	}
+
 	private boolean updateCheckGithub() {
 		boolean update = false;
 		try {
-			String arch = this.GetArch();
-
-			String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
-			String urlStr = http_url + "/android-" + arch + "/README.md";
-
-			URL url = new URL(urlStr);
-			HttpURLConnection urlconn = (HttpURLConnection)url.openConnection();
-			urlconn.setRequestMethod("GET");
-			urlconn.setInstanceFollowRedirects(true);
-			urlconn.getRequestProperties();
-			/* 20 seconds connect timeout */
-			urlconn.setConnectTimeout(20000);
+			HttpsURLConnection urlconn = getGithubConnection("README.md");
 			urlconn.connect();
 			String etag = urlconn.getHeaderField("ETag");
 			urlconn.disconnect();
@@ -206,17 +234,8 @@ public class Utils {
 
 	public String getGithubREADME() {
 		try {
-			String arch = this.GetArch();
-			String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
-			String urlStr = http_url + "/android-" + arch + "/README.md";
-
-			URL url = new URL(urlStr);
-			HttpURLConnection urlconn = (HttpURLConnection)url.openConnection();
-			urlconn.setRequestMethod("GET");
-			urlconn.setInstanceFollowRedirects(true);
-			urlconn.getRequestProperties();
-			/* 20 seconds connect timeout */
-			urlconn.setConnectTimeout(20000);
+			HttpsURLConnection urlconn = getGithubConnection("README.md");
+			// 20 seconds connect timeout 
 			BufferedReader br = null;
 			if (urlconn.getResponseCode() != 400) {
 				br = new BufferedReader(new InputStreamReader((urlconn.getInputStream())));

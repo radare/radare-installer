@@ -144,9 +144,9 @@ public class MainActivity extends Activity {
 		public void onClick(View v) {
 			remoteRunButton = (Button)findViewById(R.id.remoteRunButton);
 
-					//remoteRunButton.setClickable(true);
-					//localRunButton.setClickable(true);
-					//remoteRunButton.setText("INSTALL");
+			//remoteRunButton.setClickable(true);
+			//localRunButton.setClickable(true);
+			//remoteRunButton.setText("INSTALL");
 			if (remoteRunButton.getText() == "^C") {
 				remoteRunButton.setText ("INSTALL");
 				outputView.append("^C");
@@ -184,6 +184,7 @@ public class MainActivity extends Activity {
 					handler.post(proc);
 				}
 				public void run() {
+					String urlFile = "";
 					String url;
 					String hg;
 					String output;
@@ -199,7 +200,7 @@ public class MainActivity extends Activity {
 					if (checkLocal.isChecked()) {
 						output("Local installation from SDCARD..\n");
 					} else {
-						output("Download: "+hg+"version\n");
+						output("Download: " + hg + "version\n");
 					}
 
 					// store installed version in preferences
@@ -209,7 +210,8 @@ public class MainActivity extends Activity {
 					if (checkGithub.isChecked()) {
 						String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
 						String version = "0.10.0-git";
-						url = http_url + "/android-" + arch + "/radare2-" + version + "-android-" + arch + ".tar.gz";
+						urlFile = http_url + "android-" + arch + "/radare2-" + version + "-android-" + arch + ".tar.gz";
+						url = http_url + "/" + urlFile;
 					} else {
 						String http_url = prefs.getString ("http_url", http_url_default);
 						url = http_url + "/" + arch + "/" + hg;
@@ -295,7 +297,7 @@ public class MainActivity extends Activity {
 							localPath = prefs.getString ("local_url", "/sdcard/radare2-android.tar.gz");
 						} else {
 							// real download
-							boolean downloadFinished = download(url, localPath);
+							boolean downloadFinished = download(url, urlFile, localPath);
 							if (thread == null) {
 								resetButtons ();
 								return;
@@ -377,7 +379,6 @@ public class MainActivity extends Activity {
 									+" /system/xbin/ragg2-cc");
 
 								if (RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2")) {
-
 									// show output for the first link, in case there's any error with su
 									output = mUtils.exec("ln -s /data/data/org.radare2.installer/radare2/bin/radare2 /system/xbin/radare2 2>&1");
 									if (!output.equals("")) output(output);
@@ -479,7 +480,7 @@ public class MainActivity extends Activity {
 		handler.post(proc);
 	}
 
-	private boolean download(String urlStr, String localPath) {
+	private boolean download(String urlStr, String urlFile, String localPath) {
 		final CheckBox checkGithub = (CheckBox) findViewById(R.id.checkGithub);
 		boolean useGithub = checkGithub.isChecked();
 		if (useGithub) {
@@ -489,11 +490,17 @@ public class MainActivity extends Activity {
 			}
 		}
 		try {
-			URL url = new URL(urlStr);
-			HttpURLConnection urlconn = (HttpURLConnection)url.openConnection();
-			urlconn.setRequestMethod("GET");
-			urlconn.setInstanceFollowRedirects(true);
-			urlconn.getRequestProperties();
+			HttpURLConnection urlconn;
+			if (useGithub) {
+				urlconn = mUtils.getGithubConnection (urlFile);
+			} else {
+				URL url = new URL(urlStr);
+				urlconn = (HttpURLConnection)url.openConnection();
+				urlconn.setRequestMethod("GET");
+				urlconn.setInstanceFollowRedirects(true);
+				urlconn.getRequestProperties();
+			}
+
 			urlconn.connect();
 			int sLength = urlconn.getContentLength();
 			output ("TARBALL SIZE "+(sLength/1024/1024)+" MB\n");
