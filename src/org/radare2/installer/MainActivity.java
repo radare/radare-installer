@@ -493,6 +493,7 @@ public class MainActivity extends Activity {
 			HttpURLConnection urlconn;
 			if (useGithub) {
 				urlconn = mUtils.getGithubConnection (urlFile);
+				output ("Verified SSL Certificate\n");
 			} else {
 				URL url = new URL(urlStr);
 				urlconn = (HttpURLConnection)url.openConnection();

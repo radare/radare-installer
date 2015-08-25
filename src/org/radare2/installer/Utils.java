@@ -280,7 +280,7 @@ public class Utils {
 			@Override
 			public void output(int id, String line)
 			{
-				radare_output.append(line);
+				radare_output.append(line + "\n");
 			}
 		};
 		try {
