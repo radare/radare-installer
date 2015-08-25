@@ -19,20 +19,18 @@ public final class PubKeyManager implements X509TrustManager {
 	// echo | openssl s_client -connect raw.githubusercontent.com:443 | openssl x509 -pubkey -noout
 	// base64 -D > rawcert.pub ; vim rawcert.pub
 	// rax2 -S < rawcert.pub > rawcert.txt
-	private static String PUB_KEY = "30820122300d06092a864886f70d0101"
-			+ "0105000382010f003082010a0282010100b1d4dc3caffd"
-			+ "f34eedc167ade6cb22e8b7e2ab28f2f7dc627008d10caf"
-			+ "d6166a21b0364b170d366304aebfea2051956566f2bfb9"
-			+ "4da40c29ebf515b1e835b3701094d51b59b4260fd68357"
-			+ "599de17c09dde013ca4d6f439bcdcf873a15a785dd6683"
-			+ "ed930cfe2b6d381c798890cfad58182d51d1c2a3f2478c"
-			+ "6f3809b9b8ef4c930bcb839487eae0a3b5d97b9b6b0f43"
-			+ "f9caee800d28a776f125f4c1353cf674adde6a33827bdc"
-			+ "fd4b76a7c2eef26abfa924a65fe72e7c0edbc37473fa7e"
-			+ "c6d8cf60eb365621b6c18ab824824d7824bae91da18aa7"
-			+ "87be662569bfbe3b726e4fe0e4852508b19189b8d67465"
-			+ "769b2c4f621fa1fa3abe9c24bf9fcab0c5c0678d020301"
-			+ "0001";
+	private static String PUB_KEY = ""
+		+ "30820122300d06092a864886f70d01010105000382010f003082010a"
+		+ "0282010100fbd5940a0ae050dc0ffc90b771479f2c05de0e9abc2a8f"
+		+ "d4f29f0846f9f2d118b423a52ad2df913ff9c5d0b240bdd6bc40762e"
+		+ "8dd81e0d378f7a9057efe3a2c0116103460efab3370b667c21168dfe"
+		+ "2f5e2e59fe63273af3ed73f84d74b35117759aed0c6bcde8c1eaca01"
+		+ "ac75f91729f04b509d4164486cf6c0677dc8eade487981974102b746"
+		+ "f65e4da5d99086d71e6851ac3e25ae2711b14734b88bde6f7941d692"
+		+ "13291180c410175c0c6c6a02bbd00afcd296781db6d4027f1f0e5240"
+		+ "536f7040da89294f0c097ea3ecc557ad03aa91ed435cf9f55be8a1f0"
+		+ "be6d1bce2dab437c70dc3fecc911f074c929a150d03c2938dc7f56b9"
+		+ "f81f04a45e9fcedd170203010001";
 
 	public void checkServerTrusted(X509Certificate[] chain, String authType)
 			throws CertificateException {
@@ -49,10 +47,10 @@ public final class PubKeyManager implements X509TrustManager {
 					"checkServerTrusted: X509Certificate is empty");
 		}
 
-		assert (null != authType && authType.equalsIgnoreCase("RSA"));
-		if (!(null != authType && authType.equalsIgnoreCase("RSA"))) {
+		assert (null != authType && authType.equalsIgnoreCase("ECDHE_RSA"));
+		if (!(null != authType && authType.equalsIgnoreCase("ECDHE_RSA"))) {
 			throw new CertificateException(
-					"checkServerTrusted: AuthType is not RSA");
+					"checkServerTrusted: AuthType is not ECDHE_RSA ("+authType+")");
 		}
 
 		// Perform customary SSL/TLS checks

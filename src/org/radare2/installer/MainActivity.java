@@ -210,8 +210,8 @@ public class MainActivity extends Activity {
 					if (checkGithub.isChecked()) {
 						String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
 						String version = "0.10.0-git";
-						urlFile = http_url + "android-" + arch + "/radare2-" + version + "-android-" + arch + ".tar.gz";
-						url = http_url + "/" + urlFile;
+						urlFile = "radare2-" + version + "-android-" + arch + ".tar.gz";
+						url = http_url + "/" + "android-" + arch + "/" + urlFile;
 					} else {
 						String http_url = prefs.getString ("http_url", http_url_default);
 						url = http_url + "/" + arch + "/" + hg;
