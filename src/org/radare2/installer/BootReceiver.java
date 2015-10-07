@@ -27,7 +27,11 @@ public class BootReceiver extends BroadcastReceiver{
 			Intent i = new Intent(context, UpdateCheckerService.class);
 			PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
 			am.cancel(pi);
-			am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + hours*60*60*1000, hours*60*60*1000, pi);
+			am.setInexactRepeating(
+				AlarmManager.ELAPSED_REALTIME_WAKEUP,
+				SystemClock.elapsedRealtime()
+					+ hours*60*60*1000,
+				hours*60*60*1000, pi);
 		}
 	}
 }

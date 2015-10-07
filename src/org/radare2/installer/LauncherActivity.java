@@ -29,20 +29,27 @@ public class LauncherActivity extends Activity {
 		Bundle b = getIntent().getExtras();
 		String file_to_open = b.getString("filename");
 
-		if (mUtils.isAppInstalled("jackpal.androidterm")) {
+		String terminal_intent = null;
+		if (mUtils.isAppInstalled("yarolegovich.materialterminal")) {
+			terminal_intent = "yarolegovich.materialterminal";
+		} else if (mUtils.isAppInstalled("jackpal.androidterm")) {
+			terminal_intent = "jackpal.androidterm";
+		}
+		if (terminal_intent != null) {
 			try {
-				Intent i = new Intent("jackpal.androidterm.RUN_SCRIPT");
+				Intent i = new Intent(terminal_intent + ".RUN_SCRIPT");
 				i.addCategory(Intent.CATEGORY_DEFAULT);
-				i.putExtra("jackpal.androidterm.iInitialCommand",
+				i.putExtra(terminal_intent + ".iInitialCommand",
 					"export PATH=$PATH:/data/data/org.radare2.installer/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(i);
 			} catch (Exception e) {
-				mUtils.myToast("ERROR: Not enough permissions.\nPlease reinstall this application and try again.", Toast.LENGTH_LONG);
+				mUtils.myToast(e.toString(), Toast.LENGTH_LONG);
+				mUtils.myToast("ERROR: Not enough permissions.\n"+
+					"Please reinstall this application and try again.", Toast.LENGTH_LONG);
 			}
 		} else {
-			//Toast.makeText(getApplicationContext(), "terminal not installed", Toast.LENGTH_LONG).show();
 			mUtils.myToast("Please install Android Terminal Emulator first!", Toast.LENGTH_LONG);
 			try {
 				Intent i = new Intent(Intent.ACTION_VIEW); 

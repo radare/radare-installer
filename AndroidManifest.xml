@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="jackpal.androidterm.permission.RUN_SCRIPT" />
     <uses-permission android:name="jackpal.androidterm.permission.APPEND_TO_PATH" />
+    <uses-permission android:name="yarolegovich.materialterminal.permission.RUN_SCRIPT" />
+    <uses-permission android:name="yarolegovich.materialterminal.permission.APPEND_TO_PATH" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
     <supports-screens 
