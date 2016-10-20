@@ -39,7 +39,9 @@ public class LaunchActivity extends Activity {
 	private boolean checkForRadare() {
 		File radarebin = new File("/data/data/org.radare2.installer/radare2/bin/radare2");
 		boolean ex = radarebin.exists();
-		if (!ex) {
+		if (ex) {
+			/* do nothing */
+		} else {
 			Intent i = new Intent(LaunchActivity.this, MainActivity.class);
 	//		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -79,7 +81,9 @@ public class LaunchActivity extends Activity {
 		}
 
 		String path = mUtils.GetPref("last_opened");
-		if (path.equals("unknown")) path = "/system/bin/toolbox";
+		if (path.equals("unknown")) {
+			path = "/system/bin/toolbox";
+		}
 		if (Intent.ACTION_SEND.equals(action)) {
 			Uri uri = (Uri)bundle.get(Intent.EXTRA_STREAM);
 			path = uri.decode(uri.toString());
@@ -89,10 +93,12 @@ public class LaunchActivity extends Activity {
 			if (path.startsWith("content://")) {
 				path = path.replaceAll("content://[^/]*", "");
 			}
-			if (path.endsWith(".apk") || path.endsWith(".APK")) {
+			if (path.toLowerCase().endsWith(".apk")) {
 				path = path.replaceAll("^", "apk://");
 			}
-			if (path == null) path = "/system/bin/toolbox";
+			if (path == null) {
+				path = "/system/bin/toolbox";
+			}
 		} 
 		file_to_open = (EditText) findViewById(R.id.file_to_open);
 		file_to_open.setText(path, TextView.BufferType.EDITABLE);
@@ -125,14 +131,14 @@ public class LaunchActivity extends Activity {
 			startActivity(intent1);
 			break;
 		case R.id.radiobutton_browser :
-			mUtils.StorePref("open_mode","browser");
+			mUtils.StorePref("open_mode", "browser");
 			Intent intent2 = new Intent(LaunchActivity.this, WebActivity.class);
 			b.putString("mode", "browser");
 			intent2.putExtras(b);
 			startActivity(intent2);
 			break;
 		case R.id.radiobutton_console :
-			mUtils.StorePref("open_mode","console");
+			mUtils.StorePref("open_mode", "console");
 			Intent intent3 = new Intent(LaunchActivity.this, LauncherActivity.class);
 			b.putString("mode", "console");
 			intent3.putExtras(b);

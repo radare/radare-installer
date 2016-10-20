@@ -66,6 +66,10 @@ public class Utils {
 		mContext = context;
 	}
 
+	public boolean isInstalled() {
+		return RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2");
+	}
+
 	public boolean isAppInstalled(String namespace) {
 		try {
 			ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(namespace, 0 );

@@ -5,6 +5,7 @@ radare2 installer for Android
 */
 package org.radare2.installer;
 
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -55,9 +56,23 @@ public class MainActivity extends Activity {
 
 		mUtils = new Utils(getApplicationContext());
 
-		CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox);
-		CheckBox checkHg = (CheckBox) findViewById(R.id.checkhg);
-		CheckBox checkLocal = (CheckBox) findViewById(R.id.checklocal);
+		final CheckBox checkBox = (CheckBox) findViewById(R.id.checkbox);
+		final CheckBox checkHg = (CheckBox) findViewById(R.id.checkhg);
+		final CheckBox checkGithub = (CheckBox) findViewById(R.id.checkGithub);
+		final CheckBox checkLocal = (CheckBox) findViewById(R.id.checklocal);
+
+		checkLocal.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton group, boolean isChecked) {
+				if (isChecked) {
+					checkHg.setEnabled(false); 
+					checkGithub.setEnabled(false); 
+				} else {
+					checkHg.setEnabled(true); 
+					checkGithub.setEnabled(true); 
+				}
+			}
+		});
 
 		String root = mUtils.GetPref("root");
 		if (root.equals("yes")) checkBox.setChecked(true);
@@ -70,11 +85,15 @@ public class MainActivity extends Activity {
 		outputView = (TextView)findViewById(R.id.outputView);
 		remoteRunButton = (Button)findViewById(R.id.remoteRunButton);
 		remoteRunButton.setOnClickListener(onRemoteRunButtonClick);
+		remoteRunButton.setText(mUtils.isInstalled()
+				? "REINSTALL" : "INSTALL");
 
 		localRunButton = (Button)findViewById(R.id.localRunButton);
 		localRunButton.setOnClickListener(onLocalRunButtonClick);
 
-		output ("Welcome to radare2 installer!\nMake your selections on the checkbox above and click the INSTALL button to begin.\nYou can access more settings by pressing the menu button.\n\n");
+		output ("Welcome to radare2 installer!\n" + 
+			"Make your selections on the checkbox above and click the INSTALL button to begin.\n" +
+			"You can access more settings by pressing the menu button.\n\n");
 
 		if (mUtils.isInternetAvailable()) {
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -83,7 +102,7 @@ public class MainActivity extends Activity {
 					String version = mUtils.GetPref("version");
 					String ETag = mUtils.GetPref("ETag");
 					RootTools.useRoot = false;
-					if (!version.equals("unknown") && !ETag.equals("unknown") && RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2")) {
+					if (!version.equals("unknown") && !ETag.equals("unknown") && mUtils.isInstalled()) {
 						output ("radare2 " + version + " is installed.\n");
 						String arch = mUtils.GetArch();
 						String http_url = prefs.getString ("http_url", http_url_default);
@@ -92,7 +111,8 @@ public class MainActivity extends Activity {
 						boolean useGithub = checkGithub.isChecked();
 						boolean update = mUtils.UpdateCheck(url, useGithub);
 						if (update) {
-							output ("New radare2 " + version + " version available!\nClick INSTALL to update now.\n");
+							output ("New radare2 " + version + " version available!\n" + 
+								"Click INSTALL to update now.\n");
 							//mUtils.SendNotification("Radare2 update", "New radare2 " + version + " version available!\n");
 						}
 					}
@@ -148,7 +168,8 @@ public class MainActivity extends Activity {
 			//localRunButton.setClickable(true);
 			//remoteRunButton.setText("INSTALL");
 			if (remoteRunButton.getText() == "^C") {
-				remoteRunButton.setText ("INSTALL");
+				remoteRunButton.setText(mUtils.isInstalled()
+						? "REINSTALL" : "INSTALL");
 				outputView.append("^C");
 				try {
 					thread.interrupt ();
@@ -178,7 +199,8 @@ public class MainActivity extends Activity {
 				private void resetButtons() {
 					Runnable proc = new Runnable() {
 						public void run() {
-							remoteRunButton.setText("INSTALL");
+							remoteRunButton.setText(mUtils.isInstalled()
+								? "REINSTALL" : "INSTALL");
 						}
 					};
 					handler.post(proc);
@@ -474,7 +496,8 @@ public class MainActivity extends Activity {
 	private void resetButtons() {
 		Runnable proc = new Runnable() {
 			public void run() {
-				remoteRunButton.setText("INSTALL");
+				remoteRunButton.setText(mUtils.isInstalled()
+						? "REINSTALL" : "INSTALL");
 			}
 		};
 		handler.post(proc);

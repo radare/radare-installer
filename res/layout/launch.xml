@@ -3,15 +3,13 @@
 android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:background="#ffffffff"
-android:padding="15dp"
+android:padding="24dp"
 >
 
 	<TextView  
 	android:layout_width="fill_parent" 
 	android:layout_height="wrap_content" 
-	android:textColor="#ff000000"
-	android:gravity="center"
+	android:gravity="left"
 	android:id="@+id/intro_text"
 	android:text="File to open:"
 	/>
@@ -20,7 +18,7 @@ android:padding="15dp"
 	android:layout_width="fill_parent" 
 	android:layout_height="wrap_content" 
 	android:textColor="#999999"
-	android:gravity="center"
+	android:gravity="left"
 	android:id="@+id/help_text"
 	android:textSize="12sp"
 	android:text="Hint: Use apk://foo.apk to open classes.dex"
@@ -28,9 +26,6 @@ android:padding="15dp"
 
 	<EditText
 	android:id="@+id/file_to_open"
-	android:textColor="#ff000000"
-	android:background="#dddddd"
-	android:padding="3dp"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:text="/system/bin/toolbox"
@@ -47,7 +42,6 @@ android:padding="15dp"
 		android:layout_height="wrap_content">
 
 			<RadioButton
-			android:textColor="#ff000000"
 			android:id="@+id/radiobutton_web"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -55,14 +49,12 @@ android:padding="15dp"
 			android:text="WebView" />
 
 			<RadioButton
-			android:textColor="#ff000000"
 			android:id="@+id/radiobutton_browser"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="Browser" />
 
 			<RadioButton
-			android:textColor="#ff000000"
 			android:id="@+id/radiobutton_console"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -84,9 +76,6 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="DEBUG"
-		android:background="@android:drawable/btn_default"
-		android:textAppearance="?android:attr/textAppearanceSmallInverse"
-		android:textColor="@android:color/primary_text_light"
 		/>
 
 		<Button
@@ -94,9 +83,6 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="OPEN"
-		android:background="@android:drawable/btn_default"
-		android:textAppearance="?android:attr/textAppearanceSmallInverse"
-		android:textColor="@android:color/primary_text_light"
 		/>
 
 	</LinearLayout>

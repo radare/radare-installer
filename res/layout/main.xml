@@ -4,18 +4,30 @@ android:orientation="vertical"
 android:keepScreenOn="true"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:background="#ffffffff"
-android:padding="15dp"
+android:padding="8dp"
 >
 
 	<TextView  
 	android:layout_width="fill_parent" 
 	android:layout_height="wrap_content"
-	android:textColor="#ff000000"
 	android:gravity="center"
 	android:id="@+id/intro1"
 	android:text="This installer will download and install radare2."
 	/>
+
+	<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+		<CheckBox
+		android:id="@+id/checkhg"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="use nightly builds"
+		android:checked="true"
+		/>
+	</LinearLayout>
 
 	<LinearLayout
 	android:layout_width="fill_parent"
@@ -26,8 +38,7 @@ android:padding="15dp"
 		android:checked="true"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="use GitHub (https)"
-		android:textColor="#ff000000"
+		android:text="from GitHub (https)"
 		/>
 	</LinearLayout>
 
@@ -40,7 +51,6 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="install from local archive (see settings)"
-		android:textColor="#ff000000"
 		/>
 	</LinearLayout>
 
@@ -53,26 +63,8 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="symlink binaries to xbin (needs root)"
-		android:textColor="#ff000000"
 		/>
 	</LinearLayout>
-
-	<LinearLayout
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:orientation="horizontal">
-
-		<CheckBox
-		android:id="@+id/checkhg"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="install r2-unstable (git builds)"
-		android:checked="true"
-		android:textColor="#ff000000"
-		/>
-
-	</LinearLayout>
-
 
 	<LinearLayout 
 	android:gravity="center" 
@@ -86,9 +78,6 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="INSTALL"
-		android:background="@android:drawable/btn_default"
-		android:textAppearance="?android:attr/textAppearanceSmallInverse"
-		android:textColor="@android:color/primary_text_light"
 		/>
 
 		<Button
@@ -96,9 +85,6 @@ android:padding="15dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="LAUNCH"
-		android:background="@android:drawable/btn_default"
-		android:textAppearance="?android:attr/textAppearanceSmallInverse"
-		android:textColor="@android:color/primary_text_light"
 		/>
 
 	</LinearLayout>
@@ -111,10 +97,12 @@ android:padding="15dp"
 
 		<TextView android:id="@+id/outputView" 
 		android:padding="2dp"
+		android:typeface="monospace"
 		android:background="#ff000000"
 		android:textColor="#ffffffff"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:textSize="10dp"
 		/>
 
 	</ScrollView>
