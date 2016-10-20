@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.radare2.installer"
+      android:installLocation="auto"
       android:versionCode="25"
       android:versionName="2.5">
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +14,7 @@
     <uses-permission android:name="yarolegovich.materialterminal.permission.RUN_SCRIPT" />
     <uses-permission android:name="yarolegovich.materialterminal.permission.APPEND_TO_PATH" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19" />
     <supports-screens 
 	android:smallScreens="true"
 	android:normalScreens="true"
