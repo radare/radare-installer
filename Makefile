@@ -10,6 +10,9 @@ sdk.dir:
 	@echo "Please provide the path to the Android SDK:"
 	@echo "  ln -fs ~/android-sdk/sdk sdk.dir"
 	@echo
+	@echo "On macOS / OSX:
+	@echo "  ln -fs ~/Library/Android/sdk sdk.dir"
+	@echo
 	@echo "And then run:"
 	@echo "  make                  # debug build"
 	@echo "  make release          # release sign and align"
