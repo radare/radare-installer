@@ -40,7 +40,7 @@ install: uninstall build
 	$(ADB) install bin/$(PKGNAME)-${BUILD}.apk
 	$(ADB) shell 'LD_LIBRARY_PATH=/system/lib am start -n $(PKGNAME)/.LaunchActivity'
 
-release: sdk.dir
+dist release: sdk.dir
 	ant release
 	$(MAKE) sign
 

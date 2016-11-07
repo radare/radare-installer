@@ -231,7 +231,7 @@ public class MainActivity extends Activity {
 					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 					if (checkGithub.isChecked()) {
 						String http_url = "https://raw.githubusercontent.com/radare/radare2-bin";
-						String version = "0.10.0-git";
+						String version = "1.0.0-git";
 						urlFile = "radare2-" + version + "-android-" + arch + ".tar.gz";
 						url = http_url + "/" + "android-" + arch + "/" + urlFile;
 					} else {
