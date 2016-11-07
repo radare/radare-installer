@@ -104,6 +104,7 @@ public class MainActivity extends Activity {
 					RootTools.useRoot = false;
 					if (!version.equals("unknown") && !ETag.equals("unknown") && mUtils.isInstalled()) {
 						output ("radare2 " + version + " is installed.\n");
+						output(mUtils.exec("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2 -v"));
 						String arch = mUtils.GetArch();
 						String http_url = prefs.getString ("http_url", http_url_default);
 						String url = http_url + "/" + arch + "/" + version;

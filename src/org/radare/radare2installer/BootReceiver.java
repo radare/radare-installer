@@ -30,8 +30,8 @@ public class BootReceiver extends BroadcastReceiver{
 			am.setInexactRepeating(
 				AlarmManager.ELAPSED_REALTIME_WAKEUP,
 				SystemClock.elapsedRealtime()
-					+ hours*60*60*1000,
-				hours*60*60*1000, pi);
+					+ hours * 60 * 60 * 1000,
+				hours * 60 * 60 * 1000, pi);
 		}
 	}
 }
