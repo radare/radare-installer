@@ -1,4 +1,4 @@
-package org.radare2.installer;
+package org.radare.radare2installer;
 
 import java.math.BigInteger;
 import java.security.KeyStore;

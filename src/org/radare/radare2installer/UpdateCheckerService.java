@@ -6,9 +6,9 @@ radare2 installer for Android
 service skeleton from:
   http://it-ride.blogspot.com.es/2010/10/android-implementing-notification.html
 */
-package org.radare2.installer;
+package org.radare.radare2installer;
 
-import org.radare2.installer.Utils;
+import org.radare.radare2installer.Utils;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;

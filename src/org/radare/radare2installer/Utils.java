@@ -3,7 +3,7 @@ radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
     2015 pancake <pancake[at]nopcode[dot]org>
 */
-package org.radare2.installer;
+package org.radare.radare2installer;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -122,7 +122,7 @@ public class Utils {
 			File sdCard = Environment.getExternalStorageDirectory();
 			storagePath = sdCard.getAbsolutePath() + "/org.radare.radare2installer/";
 		} else {
-			//storagePath = "/data/data/org.radare2.installer/";
+			//storagePath = "/data/data/org.radare.radare2installer/";
 			storagePath = mContext.getApplicationInfo().dataDir;
 		}
 		return storagePath;

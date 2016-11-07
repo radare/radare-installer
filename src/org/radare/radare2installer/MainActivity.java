@@ -3,7 +3,7 @@ radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
     2015 Sergi Alvarez <pancake@nopcode.org>
 */
-package org.radare2.installer;
+package org.radare.radare2installer;
 
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.app.Activity;
@@ -31,7 +31,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
-import org.radare2.installer.Utils;
+import org.radare.radare2installer.Utils;
 import com.ice.tar.*;
 import com.stericson.RootTools.*;
 
@@ -350,7 +350,6 @@ public class MainActivity extends Activity {
 						}
 
 						// make sure bin files are executable
-						String basedir = "/data/data/" + mUtils.PKGNAME;
 						mUtils.exec("chmod 755 " + basedir + "radare2/bin/*");
 						mUtils.exec("chmod 755 " + basedir + "radare2/bin/");
 						mUtils.exec("chmod 755 " + basedir + "radare2/");
@@ -435,7 +434,7 @@ public class MainActivity extends Activity {
 						if (!RootTools.exists(basedir + "/radare2/bin/radare2")) {
 							output("\n\nSomething went wrong during installation :(\n");
 						} else {
-							//if (!symlinksCreated) output("\nRadare2 is installed in:\n   /data/data/org.radare2.installer/radare2/\n");
+							//if (!symlinksCreated) output("\nRadare2 is installed in:\n   /data/data/org.radare.radare2installer/radare2/\n");
 							output("\nTesting installation:\n\n$ radare2 -v\n");
 							output = mUtils.exec(basedir + "/radare2/bin/radare2 -v");
 							if (!output.equals("")) {

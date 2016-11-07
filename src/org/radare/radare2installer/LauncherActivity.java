@@ -3,9 +3,9 @@ radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
 (c) 2015 pancake <pancake[at]nopcode[dot]org>
 */
-package org.radare2.installer;
+package org.radare.radare2installer;
 
-import org.radare2.installer.Utils;
+import org.radare.radare2installer.Utils;
 
 import android.app.Activity;
 import android.os.Bundle;

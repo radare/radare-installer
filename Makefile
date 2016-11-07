@@ -62,15 +62,16 @@ key.store:
 	keytool -genkey -v -keystore key.store -alias Radare2 \
 		-keyalg RSA -keysize 4096 -validity 100000
 
+APPNAME=radare2installer
 sign:
-	sh apk-clean.sh bin/$(PKGNAME)-release-unsigned.apk bin/$(PKGNAME)-release.apk
+	sh apk-clean.sh bin/$(APPNAME)-release-unsigned.apk bin/$(APPNAME)-release.apk
 	jarsigner -verbose -keystore key.store -digestalg SHA1 -sigalg MD5withRSA \
-		bin/$(PKGNAME)-release.apk Radare2
+		bin/$(APPNAME)-release.apk Radare2
 	rm -f $(PKGNAME).apk
-	sdk.dir/tools/zipalign 4 bin/$(PKGNAME)-release.apk $(PKGNAME).apk
+	sdk.dir/tools/zipalign 4 bin/$(APPNAME)-release.apk $(PKGNAME).apk
 
 align:
-	sdk.dir/tools/zipalign 4 bin/$(PKGNAME)-${BUILD}.apk bin/$(PKGNAME)-aligned.apk
+	sdk.dir/tools/zipalign 4 bin/$(APPNAME)-${BUILD}.apk bin/$(APPNAME)-aligned.apk
 
 R2BIN=/data/data/$(PKGNAME)/radare2/bin/radare2
 suid:
