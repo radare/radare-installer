@@ -92,14 +92,13 @@ public class WebActivity extends Activity {
 		if (true) { //RootTools.isProcessRunning("radare2")) {
 			String open_mode = mUtils.GetPref("open_mode");
 			if (open_mode.equals("browser")) {
-				String url = "http://localhost:"+port;
+				String url = "http://localhost:" + port + "/m";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				i.setData(Uri.parse(url));
 				startActivity(i);
 				Log.v(TAG, "Browser started");
-			}
-			if (open_mode.equals("web")) {
+			} else if (open_mode.equals("web")) {
 				try {
 					webview = (WebView) findViewById(R.id.webview);
 					webview.setWebViewClient(new RadareWebViewClient());
@@ -155,7 +154,7 @@ public class WebActivity extends Activity {
 				webview.setScrollbarFadingEnabled(false);
 				webview.setHorizontalScrollBarEnabled(false);
 	*/
-				webview.loadUrl("http://localhost:"+port);
+				webview.loadUrl("http://localhost:" + port + "/m");
 				Log.v(TAG, "WebView started successfully");
 			}
 		} else {
@@ -194,7 +193,7 @@ public class WebActivity extends Activity {
 			String port = prefs.getString("http_port", "9090");
 			mUtils.sleep (1);
 			// reload page
-			view.loadUrl("http://localhost:"+port);
+			view.loadUrl("http://localhost:" + port);
 			// retry in few seconds
 			Log.v(TAG, "Error: radare2 webserver did not start");
 			mUtils.myToast("Error: radare2 webserver did not start", Toast.LENGTH_LONG);
