@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-(c) 2015 pancake <pancake[at]nopcode[dot]org>
+(c) 2015-2016 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare.radare2installer;
 
@@ -18,12 +18,27 @@ public class LauncherActivity extends Activity {
 	private Utils mUtils;
 
 	private static String filterSingleQuote(String str) {
-		return str.replaceAll("\\", "").replaceAll("'", "");
+		if (str == null) {
+			return null;
+		}
+		return str.replaceAll("\\\\", "").replaceAll("'", "");
+	}
+
+	private String findTerminalApp() {
+		String[] apps = {
+			"yarolegovich.materialterminal",
+			"jackpal.androidterm"
+		};
+		for (int i = 0; i < apps.length; i++) {
+			if (mUtils.isAppInstalled(apps[i])) {
+				return apps[i];
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		// we don't need a layout for this activity as we finish() it right after the intent has started
 		//setContentView(R.layout.launcher);
@@ -33,18 +48,13 @@ public class LauncherActivity extends Activity {
 		Bundle b = getIntent().getExtras();
 		String file_to_open = filterSingleQuote(b.getString("filename"));
 
-		String terminal_intent = null;
-		if (mUtils.isAppInstalled("yarolegovich.materialterminal")) {
-			terminal_intent = "yarolegovich.materialterminal";
-		} else if (mUtils.isAppInstalled("jackpal.androidterm")) {
-			terminal_intent = "jackpal.androidterm";
-		}
-		if (terminal_intent != null) {
+		String term = findTerminalApp();
+		if (term != null) {
 			try {
-				Intent i = new Intent(terminal_intent + ".RUN_SCRIPT");
+				Intent i = new Intent(term + ".RUN_SCRIPT");
 				i.addCategory(Intent.CATEGORY_DEFAULT);
 				// TODO: escape single quotes in file_to_open
-				i.putExtra(terminal_intent + ".iInitialCommand",
+				i.putExtra(term + ".iInitialCommand",
 					  "export PATH=$PATH:/data/data/" + mUtils.PKGNAME + "/radare2/bin/"
 					+ "; radare2 '" + file_to_open + "' || sleep 3"
 					+ "; exit");
@@ -57,7 +67,7 @@ public class LauncherActivity extends Activity {
 					"Please reinstall this application and try again.", Toast.LENGTH_LONG);
 			}
 		} else {
-			mUtils.myToast("Please install Android Terminal Emulator first!", Toast.LENGTH_LONG);
+			mUtils.myToast("Please install Android Terminal Emulator and reinstall the radare2 app!", Toast.LENGTH_LONG);
 			try {
 				Intent i = new Intent(Intent.ACTION_VIEW); 
 				i.setData(Uri.parse("market://details?id=jackpal.androidterm")); 
@@ -69,6 +79,7 @@ public class LauncherActivity extends Activity {
 			}
 		}
 	}
+
 	@Override
 	protected void onPause(){
 		finish();

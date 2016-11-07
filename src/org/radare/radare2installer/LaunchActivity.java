@@ -79,6 +79,9 @@ public class LaunchActivity extends Activity {
 		if (open_mode.equals("console")) {
 			radiogroup.check(R.id.radiobutton_console);
 		}
+		if (open_mode.equals("terminal")) {
+			radiogroup.check(R.id.radiobutton_terminal);
+		}
 
 		String path = mUtils.GetPref("last_opened");
 		if (path.equals("unknown")) {
@@ -137,12 +140,19 @@ public class LaunchActivity extends Activity {
 			intent2.putExtras(b);
 			startActivity(intent2);
 			break;
-		case R.id.radiobutton_console :
-			mUtils.StorePref("open_mode", "console");
+		case R.id.radiobutton_terminal:
+			mUtils.StorePref("open_mode", "terminal");
 			Intent intent3 = new Intent(LaunchActivity.this, LauncherActivity.class);
-			b.putString("mode", "console");
+			b.putString("mode", "terminal");
 			intent3.putExtras(b);
 			startActivity(intent3);
+			break;
+		case R.id.radiobutton_console :
+			mUtils.StorePref("open_mode", "console");
+			Intent intent4 = new Intent(LaunchActivity.this, ConsoleActivity.class);
+			b.putString("mode", "console");
+			intent4.putExtras(b);
+			startActivity(intent4);
 			break;
 		}
 	}

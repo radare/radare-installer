@@ -55,6 +55,12 @@ android:padding="24dp"
 			android:text="Browser" />
 
 			<RadioButton
+			android:id="@+id/radiobutton_terminal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Terminal" />
+
+			<RadioButton
 			android:id="@+id/radiobutton_console"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

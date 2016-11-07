@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:keepScreenOn="true"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:padding="8dp"
+>
+
+	<EditText
+	android:id="@+id/consoleInput"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:text=""
+	/>
+
+	<LinearLayout 
+	android:gravity="center" 
+	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content"
+	android:padding="2dp"
+	android:orientation="horizontal">
+
+		<Button
+		android:id="@+id/runButton" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="RUN"
+		/>
+
+		<Button
+		android:id="@+id/quitButton" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="QUIT"
+		/>
+
+	</LinearLayout>
+
+	<ScrollView
+	android:id="@+id/widget48"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#ff000000">
+
+		<TextView android:id="@+id/consoleOutput" 
+		android:padding="2dp"
+		android:typeface="monospace"
+		android:background="#ff000000"
+		android:textColor="#ffffffff"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textSize="10dp"
+		/>
+
+	</ScrollView>
+
+</LinearLayout>
