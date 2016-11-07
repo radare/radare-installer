@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.radare.radare2-installer"
+      package="org.radare.radare2installer"
       android:installLocation="auto"
       android:versionCode="26"
       android:versionName="2.6">

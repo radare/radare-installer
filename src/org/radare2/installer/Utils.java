@@ -56,18 +56,19 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import com.stericson.RootTools.*;
-//import org.radare2.installer.PubKeyManager;
 
 public class Utils {
 
 	private Context mContext;
+	public static String PKGNAME;
 
 	public Utils(Context context) {
 		mContext = context;
+		PKGNAME = mContext.getApplicationContext().getPackageName();
 	}
 
 	public boolean isInstalled() {
-		return RootTools.exists("/data/data/org.radare2.installer/radare2/bin/radare2");
+		return RootTools.exists("/data/data/" + PKGNAME + "/radare2/bin/radare2");
 	}
 
 	public boolean isAppInstalled(String namespace) {
@@ -119,7 +120,7 @@ public class Utils {
 		boolean use_sdcard = settings.getBoolean("use_sdcard", false);
 		if (use_sdcard) {
 			File sdCard = Environment.getExternalStorageDirectory();
-			storagePath = sdCard.getAbsolutePath() + "/org.radare2.installer/";
+			storagePath = sdCard.getAbsolutePath() + "/org.radare.radare2installer/";
 		} else {
 			//storagePath = "/data/data/org.radare2.installer/";
 			storagePath = mContext.getApplicationInfo().dataDir;

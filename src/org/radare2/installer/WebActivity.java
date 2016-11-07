@@ -83,7 +83,7 @@ public class WebActivity extends Activity {
 		}
 		Log.v(TAG, "r2args: " + r2args);
 
-		String output = mUtils.exec("/data/data/org.radare2.installer/radare2/bin/radare2 " + 
+		String output = mUtils.exec("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2 " + 
 			http_port + r2args + " -c=h " + file_to_open + " &");
 		Log.v(TAG, "radare2 started");
 

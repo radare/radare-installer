@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-(c) 2015 pancake <pancake[at]nopcode[dot]org>
+(c) 2015-2016 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare2.installer;
 
@@ -37,7 +37,7 @@ public class LaunchActivity extends Activity {
 	private EditText file_to_open;
 
 	private boolean checkForRadare() {
-		File radarebin = new File("/data/data/org.radare2.installer/radare2/bin/radare2");
+		File radarebin = new File("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2");
 		boolean ex = radarebin.exists();
 		if (ex) {
 			/* do nothing */
@@ -114,9 +114,9 @@ public class LaunchActivity extends Activity {
 	public void startStuff(String arg) {
 		int selectedId = radiogroup.getCheckedRadioButtonId();
 
-		if (!checkForRadare())
+		if (!checkForRadare()) {
 			return;
-
+		}
 		file_to_open = (EditText) findViewById(R.id.file_to_open);
 		Bundle b = new Bundle();
 		b.putString("filename", arg+"\"" + file_to_open.getText().toString() + '"');

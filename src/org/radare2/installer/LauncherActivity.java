@@ -40,7 +40,7 @@ public class LauncherActivity extends Activity {
 				Intent i = new Intent(terminal_intent + ".RUN_SCRIPT");
 				i.addCategory(Intent.CATEGORY_DEFAULT);
 				i.putExtra(terminal_intent + ".iInitialCommand",
-					"export PATH=$PATH:/data/data/org.radare2.installer/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
+					"export PATH=$PATH:/data/data/" + mUtils.PKGNAME + "/radare2/bin/ ; radare2 " + file_to_open + " ; exit");
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(i);

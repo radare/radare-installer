@@ -28,7 +28,7 @@ public class PathReceiver extends BroadcastReceiver{
 		if (action.equals("jackpal.androidterm.broadcast.APPEND_TO_PATH")) {
 			/* The directory we want appended goes into the result extras */
 			Bundle result = getResultExtras(true);
-			result.putString(packageName, "/data/data/org.radare2.installer/radare2/bin/");
+			result.putString(packageName, "/data/data/org.radare.radare2installer/radare2/bin/");
 			setResultCode(Activity.RESULT_OK);
 		}
 	}
