@@ -120,7 +120,7 @@ public class Utils {
 		boolean use_sdcard = settings.getBoolean("use_sdcard", false);
 		if (use_sdcard) {
 			File sdCard = Environment.getExternalStorageDirectory();
-			storagePath = sdCard.getAbsolutePath() + "/org.radare.radare2installer/";
+			storagePath = sdCard.getAbsolutePath() + "/" + PKGNAME + "/";
 		} else {
 			//storagePath = "/data/data/org.radare.radare2installer/";
 			storagePath = mContext.getApplicationInfo().dataDir;

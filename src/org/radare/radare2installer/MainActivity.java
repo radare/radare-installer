@@ -349,16 +349,16 @@ public class MainActivity extends Activity {
 							mUtils.exec("rm " + localPath);
 						}
 
+						output("Fixing permissions...\n");
 						// make sure bin files are executable
-						mUtils.exec("chmod 755 " + basedir + "radare2/bin/*");
-						mUtils.exec("chmod 755 " + basedir + "radare2/bin/");
 						mUtils.exec("chmod 755 " + basedir + "radare2/");
-
-						// make sure lib files are readable by other apps (for webserver using -c=h)
-						mUtils.exec("chmod -R 755 " + basedir + "/radare2/lib/");
+						mUtils.exec("chmod 755 " + basedir + "radare2/bin");
+						mUtils.exec("chmod 755 " + basedir + "radare2/lib");
+						mUtils.exec("chmod 755 " + basedir + "radare2/bin/*");
+						mUtils.exec("chmod 755 " + basedir + "radare2/bin/radare2");
 
 						// setup temp folder for r2
-						output("Create temporary directory... ");
+						output("Removing temporary directory... ");
 						mUtils.exec("rm -rf " + basedir + "/radare2/tmp");
 						dir.mkdirs(); // better than shell mkdir
 						mUtils.exec("chmod 1777 " + storagePath + "/radare2/tmp/");
