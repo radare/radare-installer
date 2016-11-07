@@ -1,7 +1,6 @@
 /*
 radare2 installer for Android
-(c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-    2015 pancake <pancake[at]nopcode[dot]org>
+(c) 2016 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare.radare2installer;
 
@@ -11,6 +10,8 @@ import org.radare.r2pipe.R2Pipe;
 import android.app.Activity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.os.Handler;
+import android.widget.*;
 
 import android.view.KeyEvent;
 import android.net.Uri;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 import java.util.Enumeration;
 
@@ -32,6 +35,43 @@ public class ConsoleActivity extends Activity {
 
 	private static final String TAG = "radare2-ConsoleActivity";
 	private Utils mUtils;
+	private R2Pipe r2p;
+	private Button RUN;
+	private Button QUIT;
+	private EditText INPUT;
+	private TextView OUTPUT;
+	private Handler handler = new Handler();
+
+	private OnClickListener onRun = new OnClickListener() {
+		public void onClick(View v) {
+			String input = INPUT.getText().toString();
+			try {
+				output("> " + input + "\n" + r2p.cmd(input) + "\n");
+			} catch (Exception e) {
+				output("> " + input + "\n" + e.toString() + "\n");
+			}
+		}
+	};
+
+	private void output(final String str) {
+		Runnable proc = new Runnable() {
+			public void run() {
+				if (str != null) {
+					OUTPUT.append(str);
+				} else {
+					OUTPUT.setText("");
+				}
+				INPUT.setText("");
+			}
+		};
+		handler.post(proc);
+	}
+
+	private OnClickListener onQuit = new OnClickListener() {
+		public void onClick(View v) {
+			finish();
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +83,14 @@ public class ConsoleActivity extends Activity {
 
 		RootTools.useRoot = false;
 
+		INPUT = (EditText)findViewById(R.id.consoleInput);
+		OUTPUT = (TextView)findViewById(R.id.consoleOutput);
+		RUN = (Button)findViewById(R.id.runButton);
+		RUN.setOnClickListener(onRun);
+
+		QUIT = (Button)findViewById(R.id.quitButton);
+		QUIT.setOnClickListener(onQuit);
+
 		// get shell first
 		try {
 			RootTools.getShell(RootTools.useRoot);
@@ -53,8 +101,16 @@ public class ConsoleActivity extends Activity {
 		mUtils.killradare();
 
 		Bundle b = getIntent().getExtras();
-		String file_to_open = b.getString("filename");
-		String input = b.getString("consoleInput");
+		String filename = b.getString("filename");
+		try {
+			if (filename.startsWith("http://")) {
+				r2p = new R2Pipe(filename, "", true);
+			} else {
+				r2p = new R2Pipe(filename, "/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2", false);
+			}
+		} catch (Exception e) {
+			mUtils.myToast(e.toString(), Toast.LENGTH_SHORT);
+		}
 	}
 
 	@Override
@@ -79,7 +135,7 @@ public class ConsoleActivity extends Activity {
 				//finish();
 				return true;
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return super.onKeyDown(keyCode, event);
