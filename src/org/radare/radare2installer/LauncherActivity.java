@@ -53,10 +53,9 @@ public class LauncherActivity extends Activity {
 			try {
 				Intent i = new Intent(term + ".RUN_SCRIPT");
 				i.addCategory(Intent.CATEGORY_DEFAULT);
-				// TODO: escape single quotes in file_to_open
 				i.putExtra(term + ".iInitialCommand",
 					  "export PATH=$PATH:/data/data/" + mUtils.PKGNAME + "/radare2/bin/"
-					+ "; radare2 '" + file_to_open + "' || sleep 3"
+					+ "; radare2 " + file_to_open + " || sleep 3"
 					+ "; exit");
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

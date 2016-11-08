@@ -38,13 +38,14 @@ android:padding="8dp"
 	</LinearLayout>
 
 	<ScrollView
-	android:id="@+id/widget48"
+	android:id="@+id/scrollOutput"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:background="#ff000000">
 
 		<TextView android:id="@+id/consoleOutput" 
 		android:padding="2dp"
+		android:gravity="bottom"
 		android:typeface="monospace"
 		android:background="#ff000000"
 		android:textColor="#ffffffff"

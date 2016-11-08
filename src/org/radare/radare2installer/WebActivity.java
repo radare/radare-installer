@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
-(c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-    2015 pancake <pancake[at]nopcode[dot]org>
+(c) 2012      Pau Oliva Fora <pof[at]eslack[dot]org>
+    2015-2016 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare.radare2installer;
 
@@ -64,14 +64,13 @@ public class WebActivity extends Activity {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		boolean http_public = prefs.getBoolean("http_public", false);
-		String http_port = prefs.getString("http_port", "9090");
+		String r2argsHttp = prefs.getString("r2argsHttp", "9090");
 
-		String port = http_port;
-		if (http_port.equals("")) {
-			http_port = " -e http.port=9090 ";
-		} else {
-			http_port = " -e http.port="+http_port;
+		String port = r2argsHttp;
+		if (r2argsHttp.equals("")) {
+			r2argsHttp = "9090";
 		}
+		r2argsHttp = " -e http.port=" + r2argsHttp;
 		String r2args = "";
 		if (http_public) {
 			r2args = " -e http.bind=public ";
@@ -84,7 +83,7 @@ public class WebActivity extends Activity {
 		Log.v(TAG, "r2args: " + r2args);
 
 		String output = mUtils.exec("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2 " + 
-			http_port + r2args + " -c=h " + file_to_open + " &");
+			r2argsHttp + r2args + " -c=h " + file_to_open + " &");
 		Log.v(TAG, "radare2 started");
 
 		mUtils.sleep (1);
@@ -190,7 +189,7 @@ public class WebActivity extends Activity {
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			String port = prefs.getString("http_port", "9090");
+			String port = prefs.getString("r2argsHttp", "9090");
 			mUtils.sleep (1);
 			// reload page
 			view.loadUrl("http://localhost:" + port);

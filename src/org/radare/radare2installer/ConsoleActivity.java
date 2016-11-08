@@ -40,6 +40,7 @@ public class ConsoleActivity extends Activity {
 	private Button QUIT;
 	private EditText INPUT;
 	private TextView OUTPUT;
+	private ScrollView SCROLL;
 	private Handler handler = new Handler();
 
 	private OnClickListener onRun = new OnClickListener() {
@@ -62,6 +63,12 @@ public class ConsoleActivity extends Activity {
 					OUTPUT.setText("");
 				}
 				INPUT.setText("");
+				/* scroll to bottom */
+				OUTPUT.scrollBy(0, 128);
+				SCROLL.scrollBy(0, 128);
+				//final int scrollAmount = OUTPUT.getLayout().getLineTop(OUTPUT.getLineCount()) - OUTPUT.getHeight();
+				//OUTPUT.scrollTo(0, Math.max(scrollAmount, 0));
+				//SCROLL.fullScroll(View.FOCUS_DOWN);
 			}
 		};
 		handler.post(proc);
@@ -85,6 +92,9 @@ public class ConsoleActivity extends Activity {
 
 		INPUT = (EditText)findViewById(R.id.consoleInput);
 		OUTPUT = (TextView)findViewById(R.id.consoleOutput);
+		OUTPUT = (TextView)findViewById(R.id.consoleOutput);
+		SCROLL = (ScrollView)findViewById(R.id.scrollOutput);
+		// OUTPUT.setMovementMethod(new ScrollingMovementMethod());
 		RUN = (Button)findViewById(R.id.runButton);
 		RUN.setOnClickListener(onRun);
 
@@ -101,7 +111,8 @@ public class ConsoleActivity extends Activity {
 		mUtils.killradare();
 
 		Bundle b = getIntent().getExtras();
-		String filename = b.getString("filename");
+		String filename = b.getString("filename").replaceAll("\"", "").replaceAll("\n",";");
+		output("$ r2 " + filename + "\n");
 		try {
 			if (filename.startsWith("http://")) {
 				r2p = new R2Pipe(filename, "", true);
@@ -131,7 +142,7 @@ public class ConsoleActivity extends Activity {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {
 				Log.v(TAG, "onKeyDown() called");
 				//webview.goBack();
-				mUtils.killradare();
+		//		mUtils.killradare();
 				//finish();
 				return true;
 			}
