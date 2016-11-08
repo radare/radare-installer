@@ -51,7 +51,7 @@ android:padding="8dp"
 		android:textColor="#ffffffff"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:textSize="10dp"
+		android:textSize="9dp"
 		/>
 
 	</ScrollView>
