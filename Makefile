@@ -33,12 +33,14 @@ clean:
 	rm -f $(PKGNAME).apk
 
 uninstall:
-	$(ADB) shell 'LD_LIBRARY_PATH=/system/lib pm uninstall $(PKGNAME)'
+	adb shell pm uninstall org.radare.radare2installer
+	#$(ADB) shell 'LD_LIBRARY_PATH=/system/lib pm uninstall $(PKGNAME)'
 
-
-install: uninstall build
-	$(ADB) install bin/$(PKGNAME)-${BUILD}.apk
-	$(ADB) shell 'LD_LIBRARY_PATH=/system/lib am start -n $(PKGNAME)/.LaunchActivity'
+# build
+install: uninstall
+	adb install org.radare.radare2installer.apk
+#	$(ADB) install bin/$(PKGNAME)-${BUILD}.apk
+	$(ADB) shell 'LD_LIBRARY_PATH=/system/lib64 am start -n $(PKGNAME)/.LaunchActivity'
 
 dist release: sdk.dir
 	ant release
