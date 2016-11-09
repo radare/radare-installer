@@ -198,7 +198,7 @@ public class LaunchActivity extends Activity {
 				if (mUtils == null) {
 					mUtils = new Utils(getApplicationContext());
 				}
-				mUtils.myToast("authors: pof & pancake", Toast.LENGTH_SHORT);
+				mUtils.myToast("Authors: pof & pancake", Toast.LENGTH_SHORT);
 			} catch (Exception e) {
 				// err
 			}

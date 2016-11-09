@@ -79,13 +79,17 @@ public class MainActivity extends Activity {
 		else checkBox.setChecked(false);
 
 		String version = mUtils.GetPref("version");
-		if (version.equals("unstable")) checkHg.setChecked(true);
-		if (version.equals("stable")) checkHg.setChecked(false);
+		if (version.equals("unstable")) {
+			checkHg.setChecked(true);
+		}
+		if (version.equals("stable")) {
+			checkHg.setChecked(false);
+		}
 
 		outputView = (TextView)findViewById(R.id.outputView);
 		remoteRunButton = (Button)findViewById(R.id.remoteRunButton);
 		remoteRunButton.setOnClickListener(onRemoteRunButtonClick);
-		remoteRunButton.setText(mUtils.isInstalled()
+		remoteRunButton.setText(checkForRadare()
 				? "REINSTALL" : "INSTALL");
 
 		localRunButton = (Button)findViewById(R.id.localRunButton);
@@ -134,9 +138,9 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case 0:
 			//startActivity(new Intent(this, SettingsActivity.class));
-			Intent intent = new Intent(this, SettingsActivity.class);
+			Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        // intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 			return true;
 		}
@@ -144,8 +148,14 @@ public class MainActivity extends Activity {
 	}
 
 	private boolean checkForRadare() {
-		File radarebin = new File("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2");
-		return radarebin.exists();
+		File radareBin = new File("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2");
+		Button RUN = (Button)findViewById(R.id.localRunButton);
+		if (radareBin.exists()) {
+			RUN.setEnabled(true);
+			return true;
+		}
+		RUN.setEnabled(false);
+		return false;
 	}
 
 	private OnClickListener onLocalRunButtonClick = new OnClickListener() {
@@ -154,8 +164,8 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(MainActivity.this, LaunchActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);      
-			} else {
-				mUtils.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
+			// } else {
+			//	mUtils.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
 			}
 		}
 	};
@@ -200,7 +210,7 @@ public class MainActivity extends Activity {
 				private void resetButtons() {
 					Runnable proc = new Runnable() {
 						public void run() {
-							remoteRunButton.setText(mUtils.isInstalled()
+							remoteRunButton.setText(checkForRadare()
 								? "REINSTALL" : "INSTALL");
 						}
 					};
@@ -239,7 +249,7 @@ public class MainActivity extends Activity {
 						String http_url = prefs.getString ("http_url", http_url_default);
 						url = http_url + "/" + arch + "/" + hg;
 					}
-					output(url+"\n");
+					output(url + "\n");
 
 					// fix broken stable URL in radare2 0.9
 //					if (cpuabi.matches(".*arm.*")) {
