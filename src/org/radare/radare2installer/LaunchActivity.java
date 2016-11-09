@@ -35,6 +35,7 @@ public class LaunchActivity extends Activity {
 	private Button btnDisplay;
 	private Button btnDebug;
 	private EditText file_to_open;
+	private boolean isInitialized;
 
 	private boolean checkForRadare() {
 		File radarebin = new File("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2");
@@ -45,11 +46,20 @@ public class LaunchActivity extends Activity {
 			Intent i = new Intent(LaunchActivity.this, MainActivity.class);
 	//		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(i);
-			mUtils.myToast("Please install radare2 first!", Toast.LENGTH_SHORT);
+			// mUtils.myToast("Please install radare2!", Toast.LENGTH_SHORT);
 		}
 		return ex;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (isInitialized) {
+			checkForRadare();
+		}
 	}
 
 	@Override
@@ -106,6 +116,7 @@ public class LaunchActivity extends Activity {
 		file_to_open = (EditText) findViewById(R.id.file_to_open);
 		file_to_open.setText(path, TextView.BufferType.EDITABLE);
 		addListenerOnButton();
+		isInitialized = true;
 	}
 
 	@Override

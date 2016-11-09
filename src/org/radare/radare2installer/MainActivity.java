@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
-(c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-    2015 Sergi Alvarez <pancake@nopcode.org>
+(c) 2012      Pau Oliva Fora <pof[at]eslack[dot]org>
+    2015-2016 Sergi Alvarez <pancake@nopcode.org>
 */
 package org.radare.radare2installer;
 
@@ -95,9 +95,8 @@ public class MainActivity extends Activity {
 		localRunButton = (Button)findViewById(R.id.localRunButton);
 		localRunButton.setOnClickListener(onLocalRunButtonClick);
 
-		output ("Welcome to radare2 installer!\n" + 
-			"Make your selections on the checkbox above and click the INSTALL button to begin.\n" +
-			"You can access more settings by pressing the menu button.\n\n");
+		output ("\n  Welcome to the radare2 installer!\n\n" + 
+			"  Check your options and press INSTALL\n\n");
 
 		if (mUtils.isInternetAvailable()) {
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -139,6 +138,8 @@ public class MainActivity extends Activity {
 		case 0:
 			//startActivity(new Intent(this, SettingsActivity.class));
 			Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
                         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         // intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
