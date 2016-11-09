@@ -6,14 +6,15 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:padding="8dp"
 >
-
+<!--
 	<TextView  
 	android:layout_width="fill_parent" 
 	android:layout_height="wrap_content"
 	android:gravity="center"
 	android:id="@+id/intro1"
-	android:text="This installer will download and install radare2."
+	android:text="This app will download and install radare2."
 	/>
+-->
 
 	<LinearLayout
 	android:layout_width="fill_parent"
