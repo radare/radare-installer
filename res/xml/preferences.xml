@@ -22,12 +22,6 @@
             android:title="URL for updates"
             android:defaultValue="http://radare.org/get/pkg/android"
         />
-        <EditTextPreference
-            android:key="local_url"
-            android:summary="Install from sdcard"
-            android:title="Local tarball path"
-            android:defaultValue="/sdcard/radare2-android.tar.gz"
-        />
     </PreferenceCategory>
     <PreferenceCategory android:title="Storage Settings" android:key="second_category">
         <CheckBoxPreference
@@ -35,6 +29,12 @@
             android:summary="Use SDCard instead of internal memory when possible"
             android:title="Use external storage"
             android:defaultValue="false"
+        />
+        <EditTextPreference
+            android:key="local_url"
+            android:summary="Install from sdcard"
+            android:title="Local tarball path"
+            android:defaultValue="/sdcard/radare2-android.tar.gz"
         />
     </PreferenceCategory>
     <PreferenceCategory android:title="Webserver Settings" android:key="third_category">
@@ -49,6 +49,12 @@
             android:summary="Which TCP port should r2 webserver listen at?"
             android:title="HTTP port"
             android:defaultValue="9090"
+        />
+        <CheckBoxPreference
+            android:key="http_upload"
+            android:summary="Allow POST on /up to upload files"
+            android:title="Allow uploads"
+            android:defaultValue="false"
         />
     </PreferenceCategory>
 </PreferenceScreen>

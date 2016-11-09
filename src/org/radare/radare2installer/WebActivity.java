@@ -66,27 +66,26 @@ public class WebActivity extends Activity {
 		String file_to_open = b.getString("filename");
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String http_port = prefs.getString("http_string", "9090");
+		boolean http_upload = prefs.getBoolean("http_upload", false);
 		boolean http_public = prefs.getBoolean("http_public", false);
-		String r2argsHttp = prefs.getString("r2argsHttp", "9090");
+		String r2args = " -e http.port=" + http_port;
 
-		String port = r2argsHttp;
-		if (r2argsHttp.equals("")) {
-			r2argsHttp = "9090";
-		}
-		r2argsHttp = " -e http.port=" + r2argsHttp;
-		String r2args = "";
 		if (http_public) {
 			r2args = " -e http.bind=public ";
 			String localip = getLocalIpAddress();
 			if (localip != null) {
-				mUtils.myToast("r2 http server\n" + localip + ":" + port, Toast.LENGTH_LONG);
+				mUtils.myToast("r2 http server\n" + localip + ":" + http_port, Toast.LENGTH_LONG);
 				Log.v(TAG, "ip address: " + localip);
 			}
+		}
+		if (http_upload) {
+			r2args += " -e http.upload=true ";
 		}
 		Log.v(TAG, "r2args: " + r2args);
 
 		String output = mUtils.exec("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2 " + 
-			r2argsHttp + r2args + " -c=h " + file_to_open + " &");
+			r2args + " -c=h " + file_to_open + " &");
 		Log.v(TAG, "radare2 started");
 
 		mUtils.sleep (1);
@@ -94,7 +93,7 @@ public class WebActivity extends Activity {
 		if (true) { //RootTools.isProcessRunning("radare2")) {
 			String open_mode = mUtils.GetPref("open_mode");
 			if (open_mode.equals("browser")) {
-				String url = "http://localhost:" + port + "/m";
+				String url = "http://localhost:" + http_port + "/m";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				i.setData(Uri.parse(url));
@@ -166,7 +165,7 @@ public class WebActivity extends Activity {
 				webview.setScrollbarFadingEnabled(false);
 				webview.setHorizontalScrollBarEnabled(false);
 	*/
-				webview.loadUrl("http://localhost:" + port + "/m");
+				webview.loadUrl("http://localhost:" + http_port + "/m");
 				Log.v(TAG, "WebView started successfully");
 			}
 		} else {
