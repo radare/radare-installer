@@ -5,7 +5,7 @@
             android:key="perform_updates"
             android:summary="Enable or disable radare2 updates"
             android:title="Enable updates" 
-            android:defaultValue="true"
+            android:defaultValue="false"
         />
         <ListPreference 
             android:key="updates_interval"
