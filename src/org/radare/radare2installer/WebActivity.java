@@ -113,6 +113,14 @@ public class WebActivity extends Activity {
 					ws.setUseWideViewPort(true);
 					ws.setLoadWithOverviewMode(true);
 					ws.setBlockNetworkImage(false);
+					ws.setDomStorageEnabled(true);
+					ws.setDatabaseEnabled(true);
+/*
+					// Fix for pre-kitkat devices
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+						ws.setDatabasePath("/data/data/" + mUtils.PKGNAME + "webstore");
+					}
+*/
 					/* ... */
 				} catch (Exception e) {
 				}
@@ -122,9 +130,7 @@ public class WebActivity extends Activity {
 					actionBar.setDisplayShowTitleEnabled(false);
 				}
 	/*
-				webview.getSettings().setAllowFileAccess(true);
 				webview.getSettings().setDomStorageEnabled(true);
-				webview.getSettings().setJavaScriptEnabled(true);
 				webview.getSettings().setSupportMultipleWindows(true);
 				webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 				webview.getSettings().setAppCacheMaxSize(1024*1024*16);
@@ -140,18 +146,13 @@ public class WebActivity extends Activity {
 				webview.getSettings().setSaveFormData(true);
 
 				webview.getSettings().setAllowContentAccess(true);
-				webview.getSettings().setAllowFileAccess(true);
 				//    webview.getSettings().setAllowFileAccessFromFileURLs(true);
 				//    webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
-				webview.getSettings().setAppCacheEnabled(true);
 				webview.getSettings().setBuiltInZoomControls(true);
-				webview.getSettings().setDatabaseEnabled(true);
 				webview.getSettings().setDisplayZoomControls(true);
-				webview.getSettings().setDomStorageEnabled(true);
 				webview.getSettings().setEnableSmoothTransition(true);
 				webview.getSettings().setGeolocationEnabled(true);
 				webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-				webview.getSettings().setJavaScriptEnabled(true);
 				webview.getSettings().setLightTouchEnabled(true);
 				webview.getSettings().setLoadWithOverviewMode(true);
 				webview.getSettings().setLoadsImagesAutomatically(true);
