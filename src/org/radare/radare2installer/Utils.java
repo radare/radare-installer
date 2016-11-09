@@ -68,7 +68,8 @@ public class Utils {
 	}
 
 	public boolean isInstalled() {
-		return RootTools.exists("/data/data/" + PKGNAME + "/radare2/bin/radare2");
+		// return RootTools.exists("/data/data/" + PKGNAME + "/radare2/bin/radare2");
+		return (new File("/data/data/" + PKGNAME + "/radare2/bin/radare2")).exists();
 	}
 
 	public boolean isAppInstalled(String namespace) {

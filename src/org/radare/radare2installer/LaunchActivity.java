@@ -38,20 +38,17 @@ public class LaunchActivity extends Activity {
 	private boolean isInitialized;
 
 	private boolean checkForRadare() {
-		File radarebin = new File("/data/data/" + mUtils.PKGNAME + "/radare2/bin/radare2");
-		boolean ex = radarebin.exists();
-		if (ex) {
-			/* do nothing */
-		} else {
-			Intent i = new Intent(LaunchActivity.this, MainActivity.class);
-	//		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-			startActivity(i);
-			// mUtils.myToast("Please install radare2!", Toast.LENGTH_SHORT);
+		if (mUtils.isInstalled()) {
+			return true;
 		}
-		return ex;
+		Intent i = new Intent(LaunchActivity.this, MainActivity.class);
+//		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		startActivity(i);
+		// mUtils.myToast("Please install radare2!", Toast.LENGTH_SHORT);
+		return false;
 	}
 
 	@Override
