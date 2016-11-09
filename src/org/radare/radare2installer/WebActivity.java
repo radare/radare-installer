@@ -8,11 +8,14 @@ package org.radare.radare2installer;
 import org.radare.radare2installer.Utils;
 
 import android.app.Activity;
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.content.Intent;
 
 import android.view.KeyEvent;
+import android.view.Window;
 import android.webkit.WebView;
+import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 import android.net.Uri;
 
@@ -102,12 +105,21 @@ public class WebActivity extends Activity {
 					webview = (WebView) findViewById(R.id.webview);
 					webview.setWebViewClient(new RadareWebViewClient());
 					webview.setWebChromeClient(new WebChromeClient());
-					webview.getSettings().setJavaScriptEnabled(true);
-					webview.getSettings().setBuiltInZoomControls(true);
-					webview.getSettings().setSupportZoom(true);
-					webview.getSettings().setUseWideViewPort(true);
-					webview.getSettings().setLoadWithOverviewMode(true);
+					webview.setWebContentsDebuggingEnabled(true);
+					WebSettings ws = webview.getSettings();
+					ws.setJavaScriptEnabled(true);
+					ws.setBuiltInZoomControls(false);
+					ws.setSupportZoom(true);
+					ws.setUseWideViewPort(true);
+					ws.setLoadWithOverviewMode(true);
+					ws.setBlockNetworkImage(false);
+					/* ... */
 				} catch (Exception e) {
+				}
+				{
+					final ActionBar actionBar = getActionBar();
+					actionBar.hide();
+					actionBar.setDisplayShowTitleEnabled(false);
 				}
 	/*
 				webview.getSettings().setAllowFileAccess(true);
