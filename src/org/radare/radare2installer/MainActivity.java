@@ -129,6 +129,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(Menu.NONE, 0, 0, "Settings");
+		menu.add(Menu.NONE, 1, 0, "About");
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -143,6 +144,17 @@ public class MainActivity extends Activity {
                         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         // intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
+			return true;
+		case 1:
+			/* copypasta from LaunchActivity */
+			try {
+				if (mUtils == null) {
+					mUtils = new Utils(getApplicationContext());
+				}
+				mUtils.myToast("Authors:\n\npancake (2015-2016)\npof (2012)", Toast.LENGTH_SHORT);
+			} catch (Exception e) {
+				// err
+			}
 			return true;
 		}
 		return false;
