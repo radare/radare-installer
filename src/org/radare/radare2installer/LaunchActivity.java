@@ -67,6 +67,7 @@ public class LaunchActivity extends Activity {
 		mUtils = new Utils(getApplicationContext());
 
 		checkForRadare();
+		mUtils.killradare();
 		setContentView(R.layout.launch);
 		// Get intent, action and extras
 		Intent intent = getIntent();
@@ -118,7 +119,6 @@ public class LaunchActivity extends Activity {
 
 	@Override
 	public void onDestroy() {
-		mUtils.killradare();
 		super.onDestroy();
 	}
 
