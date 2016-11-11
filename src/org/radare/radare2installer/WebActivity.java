@@ -192,9 +192,11 @@ public class WebActivity extends Activity {
 */
 
 	private class RadareWebViewClient extends WebViewClient {
+		private boolean once = true;
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			view.loadUrl(url);
+			once = true;
 			return true;
 		}
 
@@ -203,8 +205,11 @@ public class WebActivity extends Activity {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			String port = prefs.getString("r2argsHttp", "9090");
 			mUtils.sleep (1);
+			if (once) {
+				view.loadUrl("http://localhost:" + port);
+				once = false;
+			}
 			// reload page
-			view.loadUrl("http://localhost:" + port);
 			// retry in few seconds
 			Log.v(TAG, "Error: radare2 webserver did not start");
 			mUtils.myToast("Error: radare2 webserver did not start", Toast.LENGTH_LONG);
