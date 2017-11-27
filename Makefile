@@ -1,6 +1,7 @@
 BUILD=debug
 #BUILD=release
 PKGNAME=org.radare.radare2installer
+ZIPALIGN=sdk.dir/tools/zipalign
 
 ADB=adb
 
@@ -70,10 +71,10 @@ sign:
 	jarsigner -verbose -keystore key.store -digestalg SHA1 -sigalg MD5withRSA \
 		bin/$(APPNAME)-release.apk Radare2
 	rm -f $(PKGNAME).apk
-	sdk.dir/tools/zipalign 4 bin/$(APPNAME)-release.apk $(PKGNAME).apk
+	$(ZIPALIGN) 4 bin/$(APPNAME)-release.apk $(PKGNAME).apk
 
 align:
-	sdk.dir/tools/zipalign 4 bin/$(APPNAME)-${BUILD}.apk bin/$(APPNAME)-aligned.apk
+	$(ZIPALIGN) 4 bin/$(APPNAME)-${BUILD}.apk bin/$(APPNAME)-aligned.apk
 
 R2BIN=/data/data/$(PKGNAME)/radare2/bin/radare2
 suid:

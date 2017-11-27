@@ -1,0 +1,33 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:2.3.3'
+	}
+}
+
+apply plugin: 'com.android.application'
+
+android {
+	lintOptions {
+		abortOnError false
+	}
+	defaultConfig {
+		applicationId "org.radare.radare2installer"
+	}
+	compileSdkVersion 22
+	buildToolsVersion "25.0.3"
+	sourceSets {
+		main {
+			manifest.srcFile 'AndroidManifest.xml'
+			java.srcDirs = [ 'src/com/ice/tar/', 'src/org/radare/radare2installer/', 'src/org/radare/r2pipe' ]
+			resources.srcDirs = [ 'res']
+			res.srcDirs = [ 'res']
+		}
+	}
+	dependencies {
+		compile files('libs/RootTools-2.5.jar', 'libs/activation.jar')
+		// runtime fileTree(dir: 'libs', include: '*.jar')
+	} 
+}

@@ -137,11 +137,10 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 0:
-			//startActivity(new Intent(this, SettingsActivity.class));
+			// startActivity(new Intent(this, SettingsActivity.class));
 			Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         // intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 			return true;
@@ -539,13 +538,13 @@ public class MainActivity extends Activity {
 	private boolean download(String urlStr, String urlFile, String localPath) {
 		final CheckBox checkGithub = (CheckBox) findViewById(R.id.checkGithub);
 		boolean useGithub = checkGithub.isChecked();
-		if (useGithub) {
-			String readme = mUtils.getGithubREADME();
-			if (readme != null) {
-				output ("\n"+readme+"\n");
-			}
-		}
 		try {
+			if (useGithub) {
+				String readme = mUtils.getGithubREADME();
+				if (readme != null) {
+					output ("\n" + readme + "\n");
+				}
+			}
 			HttpURLConnection urlconn;
 			if (useGithub) {
 				urlconn = mUtils.getGithubConnection (urlFile);
@@ -560,9 +559,9 @@ public class MainActivity extends Activity {
 
 			urlconn.connect();
 			int sLength = urlconn.getContentLength();
-			output ("TARBALL SIZE "+(sLength/1024/1024)+" MB\n");
+			output ("TARBALL SIZE " + (sLength / 1024 / 1024) + " MB\n");
 			String mETag = urlconn.getHeaderField("ETag");
-			mUtils.StorePref("ETag",mETag);
+			mUtils.StorePref("ETag", mETag);
 			InputStream in = urlconn.getInputStream();
 			FileOutputStream out = new FileOutputStream(localPath);
 			boolean stopped = false;
@@ -574,7 +573,7 @@ public class MainActivity extends Activity {
 			while ((read = in.read(buffer)) > 0) {
 				outlen += read;
 				out.write(buffer, 0, read);
-				int pc = (outlen*100 / sLength);
+				int pc = (outlen * 100 / sLength);
 				switch (pc) {
 				case 16:
 				case 32:
@@ -582,7 +581,7 @@ public class MainActivity extends Activity {
 				case 64:
 				case 80:
 					if (pc != opc) {
-						output (" ."+pc+"% ");
+						output (" ." + pc + "% ");
 						opc = pc;
 					}
 					break;
