@@ -40,9 +40,17 @@ android:padding="8dp"
 
 	<ScrollView
 	android:id="@+id/scrollOutput"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
 	android:background="#ff000000">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:keepScreenOn="true"
+android:gravity="bottom"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:padding="0dp"
+>
 
 		<TextView android:id="@+id/consoleOutput" 
 		android:padding="2dp"
@@ -55,14 +63,16 @@ android:padding="8dp"
 		android:textSize="9dp"
 		/>
 
+		<EditText
+		android:id="@+id/consoleInput"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:text=""
+		/>
+</LinearLayout>
+
 	</ScrollView>
 
-	<EditText
-	android:id="@+id/consoleInput"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-        android:singleLine="true"
-	android:text=""
-	/>
 
 </LinearLayout>

@@ -52,6 +52,9 @@ public class ConsoleActivity extends Activity {
 		} catch (Exception e) {
 			output("> " + input + "\n" + e.toString() + "\n");
 		}
+		SCROLL.scrollBy(0, OUTPUT.getText().length());
+		SCROLL.fullScroll(ScrollView.FOCUS_DOWN);
+		INPUT.requestFocus();
 	}
 
 	private OnClickListener onRun = new OnClickListener() {
@@ -113,7 +116,7 @@ public class ConsoleActivity extends Activity {
 					runInputCommand();
 					return true;
 				}
-				return false;
+				return true;
 			}
 		});
 		OUTPUT = (TextView)findViewById(R.id.consoleOutput);
@@ -126,7 +129,7 @@ public class ConsoleActivity extends Activity {
 		QUIT = (Button)findViewById(R.id.quitButton);
 		QUIT.setOnClickListener(onQuit);
 		CLEAR = (Button)findViewById(R.id.clearButton);
-		CLEAR.setOnClickListener(onQuit);
+		CLEAR.setOnClickListener(onClear);
 
 		// get shell first
 		try {
