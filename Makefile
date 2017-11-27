@@ -2,6 +2,7 @@ BUILD=debug
 #BUILD=release
 PKGNAME=org.radare.radare2installer
 ZIPALIGN=sdk.dir/tools/zipalign
+USE_GRADLE=1
 
 ADB=adb
 
@@ -26,10 +27,18 @@ sdk.dir:
 	@false
 
 build: sdk.dir
+ifeq ($(USE_GRADLE),1)
+	gradle build
+else
 	ant ${BUILD}
+endif
 
 clean:
+ifeq ($(USE_GRADLE),1)
+	gradle clean
+else
 	ant clean
+endif
 	rm -rf bin gen
 	rm -f $(PKGNAME).apk
 
