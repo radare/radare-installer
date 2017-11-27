@@ -44,6 +44,12 @@
             android:title="Public HTTP server"
             android:defaultValue="false"
         />
+        <CheckBoxPreference
+            android:key="http_sandbox"
+            android:summary="Restrict access to filesystem, execution and network"
+            android:title="Sandbox enabled"
+            android:defaultValue="true"
+        />
         <EditTextPreference
             android:key="http_port"
             android:summary="Which TCP port should r2 webserver listen at?"

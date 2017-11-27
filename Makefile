@@ -96,5 +96,4 @@ suid:
 	$(ADB) shell chown root:root ${R2BIN}
 	$(ADB) shell chmod 4755 ${R2BIN}
 	
-
 .PHONY: test install uninstall build

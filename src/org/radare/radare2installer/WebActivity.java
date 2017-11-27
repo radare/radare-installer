@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012      Pau Oliva Fora <pof[at]eslack[dot]org>
-    2015-2016 pancake <pancake[at]nopcode[dot]org>
+    2015-2017 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare.radare2installer;
 
@@ -69,8 +69,10 @@ public class WebActivity extends Activity {
 		String http_port = prefs.getString("http_string", "9090");
 		boolean http_upload = prefs.getBoolean("http_upload", false);
 		boolean http_public = prefs.getBoolean("http_public", false);
+		boolean http_sandbox = prefs.getBoolean("http_sandbox", true);
 		String r2args = " -e http.port=" + http_port;
 
+		r2args += " -e http.sandbox=" + String.valueOf(http_sandbox);
 		if (http_public) {
 			r2args = " -e http.bind=public ";
 			String localip = getLocalIpAddress();
