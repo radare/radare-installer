@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 
 import java.util.Enumeration;
 
@@ -36,21 +37,26 @@ public class ConsoleActivity extends Activity {
 	private static final String TAG = "radare2-ConsoleActivity";
 	private Utils mUtils;
 	private R2Pipe r2p;
-	private Button RUN;
 	private Button QUIT;
+	private Button CLEAR;
+	private Button RUN;
 	private EditText INPUT;
 	private TextView OUTPUT;
 	private ScrollView SCROLL;
 	private Handler handler = new Handler();
 
+	public void runInputCommand() {
+		String input = INPUT.getText().toString();
+		try {
+			output("> " + input + "\n" + r2p.cmd(input) + "\n");
+		} catch (Exception e) {
+			output("> " + input + "\n" + e.toString() + "\n");
+		}
+	}
+
 	private OnClickListener onRun = new OnClickListener() {
 		public void onClick(View v) {
-			String input = INPUT.getText().toString();
-			try {
-				output("> " + input + "\n" + r2p.cmd(input) + "\n");
-			} catch (Exception e) {
-				output("> " + input + "\n" + e.toString() + "\n");
-			}
+			runInputCommand();
 		}
 	};
 
@@ -63,9 +69,10 @@ public class ConsoleActivity extends Activity {
 					OUTPUT.setText("");
 				}
 				INPUT.setText("");
-				/* scroll to bottom */
-				OUTPUT.scrollBy(0, 128);
-				SCROLL.scrollBy(0, 128);
+				/* scroll to bottom is done by gravity */
+				// OUTPUT.scrollBy(0, 128);
+				SCROLL.scrollBy(0, OUTPUT.getText().length());
+				SCROLL.fullScroll(ScrollView.FOCUS_DOWN);
 				//final int scrollAmount = OUTPUT.getLayout().getLineTop(OUTPUT.getLineCount()) - OUTPUT.getHeight();
 				//OUTPUT.scrollTo(0, Math.max(scrollAmount, 0));
 				//SCROLL.fullScroll(View.FOCUS_DOWN);
@@ -80,6 +87,13 @@ public class ConsoleActivity extends Activity {
 		}
 	};
 
+	private OnClickListener onClear = new OnClickListener() {
+		public void onClick(View v) {
+			INPUT.setText("");
+			OUTPUT.setText("");
+		}
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,15 +105,28 @@ public class ConsoleActivity extends Activity {
 		RootTools.useRoot = false;
 
 		INPUT = (EditText)findViewById(R.id.consoleInput);
-		OUTPUT = (TextView)findViewById(R.id.consoleOutput);
+		INPUT.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// If the event is a key-down event on the "enter" button
+				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+					// Perform action on key press
+					runInputCommand();
+					return true;
+				}
+				return false;
+			}
+		});
 		OUTPUT = (TextView)findViewById(R.id.consoleOutput);
 		SCROLL = (ScrollView)findViewById(R.id.scrollOutput);
-		// OUTPUT.setMovementMethod(new ScrollingMovementMethod());
+		SCROLL.fullScroll(ScrollView.FOCUS_DOWN);
+
 		RUN = (Button)findViewById(R.id.runButton);
 		RUN.setOnClickListener(onRun);
 
 		QUIT = (Button)findViewById(R.id.quitButton);
 		QUIT.setOnClickListener(onQuit);
+		CLEAR = (Button)findViewById(R.id.clearButton);
+		CLEAR.setOnClickListener(onQuit);
 
 		// get shell first
 		try {

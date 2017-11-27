@@ -23,8 +23,8 @@ android {
 		main {
 			manifest.srcFile 'AndroidManifest.xml'
 			java.srcDirs = [ 'src/com/ice/tar/', 'src/org/radare/radare2installer/', 'src/org/radare/r2pipe' ]
-			resources.srcDirs = [ 'res']
-			res.srcDirs = [ 'res']
+			resources.srcDirs = [ 'res' ]
+			res.srcDirs = [ 'res' ]
 		}
 	}
 	dependencies {
