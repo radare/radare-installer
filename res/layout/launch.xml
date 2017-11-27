@@ -40,19 +40,12 @@ android:padding="24dp"
 		android:id="@+id/radiogroup1"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content">
-
 			<RadioButton
-			android:id="@+id/radiobutton_web"
+			android:id="@+id/radiobutton_console"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:checked="true"
-			android:text="WebView" />
-
-			<RadioButton
-			android:id="@+id/radiobutton_browser"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Browser" />
+			android:text="Console" />
 
 			<RadioButton
 			android:id="@+id/radiobutton_terminal"
@@ -61,11 +54,16 @@ android:padding="24dp"
 			android:text="Terminal" />
 
 			<RadioButton
-			android:id="@+id/radiobutton_console"
+			android:id="@+id/radiobutton_web"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Console" />
+			android:text="WebView" />
 
+			<RadioButton
+			android:id="@+id/radiobutton_browser"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Browser" />
 		</RadioGroup>
 
 	</LinearLayout>
