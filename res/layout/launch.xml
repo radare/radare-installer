@@ -36,9 +36,11 @@ android:padding="24dp"
 	android:layout_height="wrap_content" 
 	android:orientation="horizontal">
 
+
 		<RadioGroup
 		android:id="@+id/radiogroup1"
-		android:layout_width="fill_parent"
+                android:layout_weight="1"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 			<RadioButton
 			android:id="@+id/radiobutton_console"
@@ -54,6 +56,12 @@ android:padding="24dp"
 			android:text="Terminal" />
 
 			<RadioButton
+			android:id="@+id/radiobutton_termux"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Termux" />
+
+			<RadioButton
 			android:id="@+id/radiobutton_web"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -65,30 +73,31 @@ android:padding="24dp"
 			android:layout_height="wrap_content"
 			android:text="Browser" />
 		</RadioGroup>
+		<LinearLayout 
+		android:gravity="center" 
+		android:layout_width="match_parent" 
+		android:layout_height="wrap_content" 
+		android:padding="2dp"
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+			<Button
+			android:id="@+id/button_debug"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="DEBUG"
+			/>
+
+			<Button
+			android:id="@+id/button_open" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="OPEN"
+			/>
+
+		</LinearLayout>
 
 	</LinearLayout>
 
-	<LinearLayout 
-	android:gravity="center" 
-	android:layout_width="fill_parent" 
-	android:layout_height="wrap_content" 
-	android:padding="2dp"
-	android:orientation="horizontal">
-
-		<Button
-		android:id="@+id/button_debug"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="DEBUG"
-		/>
-
-		<Button
-		android:id="@+id/button_open" 
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="OPEN"
-		/>
-
-	</LinearLayout>
 
 </LinearLayout>

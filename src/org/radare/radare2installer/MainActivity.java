@@ -150,7 +150,7 @@ public class MainActivity extends Activity {
 				if (mUtils == null) {
 					mUtils = new Utils(getApplicationContext());
 				}
-				mUtils.myToast("Authors:\n\npancake (2015-2016)\npof (2012)", Toast.LENGTH_SHORT);
+				mUtils.myToast("Authors:\n\npancake (2015-2017)\npof (2012)", Toast.LENGTH_SHORT);
 			} catch (Exception e) {
 				// err
 			}

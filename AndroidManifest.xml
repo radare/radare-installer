@@ -34,7 +34,8 @@
         </activity>
         <activity android:name=".MainActivity" android:label="radare2 installer" android:launchMode="singleInstance" android:configChanges="orientation|screenSize" />
         <activity android:name=".WebActivity" android:label="radare2 http" android:launchMode="singleInstance" android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".ConsoleActivity" android:label="r2pipe" android:launchMode="singleInstance" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name=".ConsoleActivity" android:label="r2pipe" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name=".TermuxActivity" android:label="termux" android:launchMode="singleInstance" android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".LauncherActivity" android:label="radare2 console" android:excludeFromRecents="true" android:launchMode="singleInstance" />
 	<activity android:name=".SettingsActivity" android:label="radare2 settings" />
         <receiver android:name=".BootReceiver">

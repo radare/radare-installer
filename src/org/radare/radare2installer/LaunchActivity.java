@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-(c) 2015-2016 pancake <pancake[at]nopcode[dot]org>
+(c) 2015-2017 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare.radare2installer;
 
@@ -90,6 +90,9 @@ public class LaunchActivity extends Activity {
 		if (open_mode.equals("terminal")) {
 			radiogroup.check(R.id.radiobutton_terminal);
 		}
+		if (open_mode.equals("termux")) {
+			radiogroup.check(R.id.radiobutton_termux);
+		}
 
 		String path = mUtils.GetPref("last_opened");
 		if (path.equals("unknown")) {
@@ -155,12 +158,19 @@ public class LaunchActivity extends Activity {
 			intent3.putExtras(b);
 			startActivity(intent3);
 			break;
-		case R.id.radiobutton_console :
+		case R.id.radiobutton_console:
 			mUtils.StorePref("open_mode", "console");
 			Intent intent4 = new Intent(LaunchActivity.this, ConsoleActivity.class);
 			b.putString("mode", "console");
 			intent4.putExtras(b);
 			startActivity(intent4);
+			break;
+		case R.id.radiobutton_termux:
+			mUtils.StorePref("open_mode", "termux");
+			Intent intent5 = new Intent(LaunchActivity.this, TermuxActivity.class);
+			b.putString("mode", "termux");
+			intent5.putExtras(b);
+			startActivity(intent5);
 			break;
 		}
 	}
@@ -206,7 +216,7 @@ public class LaunchActivity extends Activity {
 				if (mUtils == null) {
 					mUtils = new Utils(getApplicationContext());
 				}
-				mUtils.myToast("Authors:\n\npancake (2015-2016)\npof (2012)", Toast.LENGTH_SHORT);
+				mUtils.myToast("Authors:\n\npancake (2015-2017)\npof (2012)", Toast.LENGTH_SHORT);
 			} catch (Exception e) {
 				// err
 			}
