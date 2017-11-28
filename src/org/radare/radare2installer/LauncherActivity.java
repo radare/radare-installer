@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012 Pau Oliva Fora <pof[at]eslack[dot]org>
-(c) 2015-2016 pancake <pancake[at]nopcode[dot]org>
+(c) 2015-2017 pancake <pancake[at]nopcode[dot]org>
 */
 package org.radare.radare2installer;
 
@@ -66,7 +66,8 @@ public class LauncherActivity extends Activity {
 					"Please reinstall this application and try again.", Toast.LENGTH_LONG);
 			}
 		} else {
-			mUtils.myToast("Please install Android Terminal Emulator and reinstall the radare2 app!", Toast.LENGTH_LONG);
+			mUtils.myToast("Please install Android Terminal Emulator and reinstall the radare2 app!\n\n"
+				+ "(yarolegovich.materialterminal, jackpal.androidterm)", Toast.LENGTH_LONG);
 			try {
 				Intent i = new Intent(Intent.ACTION_VIEW); 
 				i.setData(Uri.parse("market://details?id=jackpal.androidterm")); 

@@ -1,7 +1,7 @@
 /*
 radare2 installer for Android
 (c) 2012      Pau Oliva Fora <pof[at]eslack[dot]org>
-    2015-2016 Sergi Alvarez <pancake@nopcode.org>
+    2015-2017 Sergi Alvarez <pancake@nopcode.org>
 */
 package org.radare.radare2installer;
 

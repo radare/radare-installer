@@ -16,6 +16,7 @@ import android.widget.*;
 import android.view.KeyEvent;
 import android.net.Uri;
 
+import android.view.Window;
 import android.widget.Toast;
 
 import android.content.SharedPreferences;
@@ -47,6 +48,9 @@ public class ConsoleActivity extends Activity {
 
 	public void runInputCommand() {
 		String input = INPUT.getText().toString();
+		if (input.equals("")) {
+			return;
+		}
 		try {
 			output("> " + input + "\n" + r2p.cmd(input) + "\n");
 		} catch (Exception e) {
@@ -100,6 +104,8 @@ public class ConsoleActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		mUtils = new Utils(getApplicationContext());
 
