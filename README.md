@@ -1,6 +1,6 @@
 radare2 installer for Android
 =============================
 
-This application is available in Google Play:
+This app is not maintained and it's recomended to use Termux instead.
 
-https://play.google.com/store/apps/details?id=org.radare2.installer
+You can still download the APK from the releases page or build it by yourself
